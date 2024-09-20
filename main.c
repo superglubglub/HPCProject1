@@ -5,20 +5,29 @@ void compressValues(MultiMatrix *matrix)
 {
     matrix->values = (SparseRow*) calloc(DEFAULT_SIZE, sizeof(SparseRow));
     matrix->indexes = (SparseRow*) calloc(DEFAULT_SIZE, sizeof(SparseRow));
-    for (int i = 0; i < DEFAULT_SIZE; i++) {
-        // create the indexes with all the space
-        matrix->values[i] = initRow();
-        matrix->indexes[i] = initRow();
-        for (int j = 0; j < DEFAULT_SIZE; j++) {
-            if (matrix->matrix[i][j] != 0) {
-                matrix->indexes[i].col[matrix->indexes[i].size - 1] = j;
-                matrix->values[i].col[matrix->values[i].size - 1] = matrix->matrix[i][j];
-                printf("Added value %d at index [%d][%d]\n",matrix->values[i].col[matrix->values[i].size-1],i,matrix->indexes[i].col[matrix->indexes[i].size-1]);
-                matrix->indexes[i].size++; matrix->values[i].size++;
+    #pragma omp parallel
+    {
+        #pragma omp single
+        {
+            for (int i = 0; i < DEFAULT_SIZE; i++) {
+                #pragma omp task
+                {
+                    // create the indexes with all the space
+                    matrix->values[i] = initRow();
+                    matrix->indexes[i] = initRow();
+                    for (int j = 0; j < DEFAULT_SIZE; j++) {
+                        if (matrix->matrix[i][j] != 0) {
+                            matrix->indexes[i].col[matrix->indexes[i].size - 1] = j;
+                            matrix->values[i].col[matrix->values[i].size - 1] = matrix->matrix[i][j];
+                            printf("Added value %d at index [%d][%d]\n",matrix->values[i].col[matrix->values[i].size-1],i,matrix->indexes[i].col[matrix->indexes[i].size-1]);
+                            matrix->indexes[i].size++; matrix->values[i].size++;
+                        }
+                    }
+                    compressRow(&matrix->values[i]);
+                    compressRow(&matrix->indexes[i]);
+                }
             }
         }
-        compressRow(&matrix->values[i]);
-        compressRow(&matrix->indexes[i]);
     }
     printf("Compression Complete\n");
 }
@@ -56,10 +65,12 @@ int simulate(float prob) {
 int main(void)
 {
     FILE *fp = initLogFile();
+    //set the number of threads
+    omp_set_num_threads(16);
     for (int i = 0; i < 3; i++) {
         clock_t start = clock();
         STATS stats = {
-            .num_threads = 1,
+            .num_threads = omp_get_num_threads(),
             .matrix_size = DEFAULT_SIZE,
             .prob = DEFAULT_PROBABILITIES[i],
         };

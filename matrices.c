@@ -8,6 +8,7 @@
 int** createMatrix(float prob)
 {
     int** matrix = calloc(DEFAULT_SIZE, sizeof(int*));
+    #pragma omp parallel for
     for (int i = 0; i < DEFAULT_SIZE; i++)
     {
         matrix[i] = (int*) calloc(DEFAULT_SIZE, sizeof(int));
@@ -61,6 +62,7 @@ int** multiplyMatrix(int **matrix_1, int **matrix_2) {
         result[i] = calloc(DEFAULT_SIZE, sizeof(int));
     }
 
+    #pragma omp parallel for collapse(2)
     for (int i = 0; i < DEFAULT_SIZE; i++) {
         for (int j = 0; j < DEFAULT_SIZE; j++) {
             for (int k = 0; k < DEFAULT_SIZE; k++) {
