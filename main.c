@@ -94,7 +94,7 @@ int main(void)
     }
     fclose(fp);
     printf("All tests passed!\n");
-    return 0;
+    exit(0);
 }
 
 /* Some considerations and notes (algorithms and computation-wise):

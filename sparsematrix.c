@@ -39,29 +39,30 @@ int findIndex(int index, SparseRow* indexes, SparseRow* values) {
 }
 
 int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
-
     int** result = (int**) calloc(DEFAULT_SIZE, sizeof(int*));
+#pragma omp parallel for
     for(int i=0; i<DEFAULT_SIZE; i++)
     {
         result[i] = (int*) calloc(DEFAULT_SIZE, sizeof(int));
     }
 
-    #pragma omp parallel for schedule(static)
+#pragma omp parallel for schedule(dynamic, 100)
     for(int i = 0; i < DEFAULT_SIZE; i++) {
         SparseRow* a_values = &A.values[i];
         SparseRow* a_indexes = &A.indexes[i];
-        for(int j = 0; j < DEFAULT_SIZE; j++) {
-            int sum = 0;
-            #pragma omp simd reduction(+:sum)
-            for(int k = 0; k < a_values->size; k++){
-                int a_index = a_indexes->col[k];
-                SparseRow* b_indexes = &B.indexes[a_index];
-                SparseRow* b_values = &B.values[a_index];
-                int b_value = findIndex(j, b_indexes, b_values);
-                #pragma omp atomic
-                sum += a_values->col[k] * b_value;
+        for(int k = 0; k < a_values->size; k++){
+            int a_index = a_indexes->col[k];
+            int a_value = a_values->col[k];
+            SparseRow* b_values = &B.values[a_index];
+            SparseRow* b_indexes = &B.indexes[a_index];
+
+#pragma omp simd
+            for(int j = 0; j < b_values->size; j++) {
+                int b_index = b_indexes->col[j];
+                int b_value = b_values->col[j];
+#pragma omp atomic
+                result[i][b_index] += a_value * b_value;
             }
-            result[i][j] = sum;
         }
     }
     return result;
