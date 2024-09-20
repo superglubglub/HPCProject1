@@ -19,7 +19,6 @@ void compressValues(MultiMatrix *matrix)
                         if (matrix->matrix[i][j] != 0) {
                             matrix->indexes[i].col[matrix->indexes[i].size - 1] = j;
                             matrix->values[i].col[matrix->values[i].size - 1] = matrix->matrix[i][j];
-                            printf("Added value %d at index [%d][%d]\n",matrix->values[i].col[matrix->values[i].size-1],i,matrix->indexes[i].col[matrix->indexes[i].size-1]);
                             matrix->indexes[i].size++; matrix->values[i].size++;
                         }
                     }
@@ -29,7 +28,6 @@ void compressValues(MultiMatrix *matrix)
             }
         }
     }
-    printf("Compression Complete\n");
 }
 
 //naive matrix multiplication algorithm
@@ -47,18 +45,22 @@ void freeSim(SIM s) {
 }
 
 int simulate(float prob) {
+    printf("It broke before the matrix creation\n");
     SIM simulation = {
         .matrix_1 = {.matrix = createMatrix(prob)},
         .matrix_2 = {.matrix = createMatrix(prob)},
-    }; printf("made initial matrices...\n");
-    simulation.multi_large = multiplyMatrix(simulation.matrix_1.matrix, simulation.matrix_2.matrix); printf("multiplied matrices...\n");
+    };
+    printf("It broke before the matrix multiplication\n");
+    simulation.multi_large = multiplyMatrix(simulation.matrix_1.matrix, simulation.matrix_2.matrix);
     printMatrix(simulation.multi_large);
+    printf("It broke before the matrix compression\n");
     compressValues(&simulation.matrix_1);
-    compressValues(&simulation.matrix_2); printf("compressed matrices...\n");
-    simulation.multi_small = multiplySparseMatrices(simulation.matrix_1, simulation.matrix_2); printf("multiplied compression matrices...\n");
+    compressValues(&simulation.matrix_2);
+    printf("It broke before the compression multiplication\n");
+    simulation.multi_small = multiplySparseMatrices(simulation.matrix_1, simulation.matrix_2);
     printMatrix(simulation.multi_small);
-    int test = testMatrix(simulation.multi_small, simulation.multi_large); printf("tested matrices...\n");
-    freeSim(simulation); printf("freed matrices...\n");
+    int test = testMatrix(simulation.multi_small, simulation.multi_large);
+    freeSim(simulation);
     return test;
 }
 
@@ -68,12 +70,15 @@ int main(void)
     //set the number of threads
     omp_set_num_threads(16);
     for (int i = 0; i < 3; i++) {
+        printf("It broke before the clock\n");
         clock_t start = clock();
+        printf("It broke before the stats\n");
         STATS stats = {
             .num_threads = omp_get_num_threads(),
             .matrix_size = DEFAULT_SIZE,
             .prob = DEFAULT_PROBABILITIES[i],
         };
+        printf("It broke before the simulation\n");
         int failures = simulate(DEFAULT_PROBABILITIES[i]);
         if(failures > 0) {
             clock_t end = clock();
