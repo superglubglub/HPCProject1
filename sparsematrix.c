@@ -55,7 +55,6 @@ int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
             int a_value = a_values->col[k];
             SparseRow* b_values = &B.values[a_index];
             SparseRow* b_indexes = &B.indexes[a_index];
-
             for(int j = 0; j < b_values->size; j++) {
                 int b_index = b_indexes->col[j];
                 int b_value = b_values->col[j];
