@@ -15,6 +15,7 @@ add_executable(HPCProject1
         logs.c
         matrices.c
         matrices.h
+        vars.h
 )
 
 # Link OpenMP to your target
