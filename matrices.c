@@ -25,10 +25,7 @@ int** createMatrix(float prob)
 void printMatrix(int** matrix) {
     for (int i = 0; i < DEFAULT_SIZE; i++) {
         for (int j = 0; j < DEFAULT_SIZE; j++) {
-            printf("[%d]", matrix[i][j]);
-            if(j != DEFAULT_SIZE - 1) {
-                printf("%2d", matrix[i][j]);
-            }
+            printf("%2d", matrix[i][j]);
         }
         printf("\n");
     }
