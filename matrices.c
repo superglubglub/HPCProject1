@@ -71,8 +71,9 @@ int** multiplyMatrix(int **matrix_1, int **matrix_2) {
                 #pragma omp critical
                 result[i][j] += matrix_1[i][k] * matrix_2[k][j];
             }
+            printf("[%d][%d]>",i,j);
         }
-    }
+    } printf("\n");
 
     return result;
 }
