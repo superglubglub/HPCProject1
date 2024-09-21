@@ -13,15 +13,24 @@ FILE* initLogFile() {
 
 int writeLogs(FILE *fp, STATS stats) {
     fprintf(fp,
-        "-----\nMatrix Size: %d\nMatrix Prob: %.6f\nNumber of Threads: %d\nRuntime: %fms\n-----\n",
-        stats.matrix_size, stats.prob, stats.num_threads, stats.runtime);
+        "-----\nMatrix Size: %d\nMatrix Prob: %.6f\nNumber of Threads: %d\n",
+        stats.matrix_size, stats.prob, stats.num_threads);
     return 0;
 }
 
 int writeFailure(FILE *fp, STATS stats) {
     fprintf(fp,
-        "\n\n!!! FAILURE !!!\n\n-----\nMatrix Size: %d\nMatrix Prob: %.6f\nNumber of Threads: %d\nRuntime: %fms\n-----\n",
-        stats.matrix_size, stats.prob, stats.num_threads, stats.runtime);
+        "Operation failed in %.6fs\n",
+        stats.runtime);
+    return 0;
+}
+
+int closeLogs(FILE *fp, STATS stats) {
+    fprintf(fp,
+        "Final Runtime: %.6fs\n",
+        stats.runtime);
+    fflush(fp);
+    fclose(fp);
     return 0;
 }
 
