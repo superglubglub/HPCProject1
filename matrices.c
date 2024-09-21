@@ -17,7 +17,7 @@ uint32_t xorshift32(uint32_t *state) {
     return x;
 }
 
-int** createMatrix(float prob)
+uint8_t** createMatrix(float prob)
 {
     uint8_t** matrix = calloc(DEFAULT_SIZE, sizeof(uint8_t*));
     for (int i = 0; i < DEFAULT_SIZE; i++){
