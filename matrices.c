@@ -19,7 +19,7 @@ int** createMatrix(float prob)
     {
         for (j = 0; j < DEFAULT_SIZE; j++)
         {
-            if( rand() % RAND_MAX < RAND_MAX * prob) {
+            if( rand() % RAND_RANGE < (int) RAND_RANGE * prob) {
                 matrix[i][j] = rand() % LIMIT;
             }
         }

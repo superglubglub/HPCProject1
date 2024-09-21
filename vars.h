@@ -2,4 +2,4 @@
 #define DEFAULT_SIZE 10000
 #define NUM_THREADS 128
 #define LIMIT 10
-#define RAND_MAX 100
+#define RAND_RANGE 100
