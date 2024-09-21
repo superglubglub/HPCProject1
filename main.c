@@ -69,9 +69,9 @@ int main(void)
     {
         #pragma omp single
         {
-            FILE *fp = initLogFile();
             printf("Set the number of threads to %d\n",omp_get_num_threads());
             for (int i = 0; i < 3; i++) {
+                FILE *fp = initLogFile();
                 double start = omp_get_wtime();
                 STATS stats = {
                     .num_threads = omp_get_num_threads(),
