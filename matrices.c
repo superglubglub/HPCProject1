@@ -42,10 +42,10 @@ int testMatrix(int** matrix_1, int** matrix_2) {
     for (int i = 0; i < DEFAULT_SIZE; i++) {
         for (int j = 0; j < DEFAULT_SIZE; j++) {
             if (matrix_1[i][j] != matrix_2[i][j]) {
-                printf("[%d != %d] FAIL\t", matrix_1[i][j], matrix_2[i][j]);
+                //printf("[%d != %d] FAIL\t", matrix_1[i][j], matrix_2[i][j]);
                 failures += 1;
             } else {
-                printf("[%d == %d] PASS\t", matrix_1[i][j], matrix_2[i][j]);
+                //printf("[%d == %d] PASS\t", matrix_1[i][j], matrix_2[i][j]);
             }
         } printf("\n");
     }

@@ -54,7 +54,7 @@ int simulate(float prob) {
     simulation.multi_small = multiplySparseMatrices(simulation.matrix_1, simulation.matrix_2);
 
     printf("\n\n-------- FINAL OUTPUT VALUES --------\n\n");
-    printf("\n\n-------- MULTIPLIED COMPRESSION MATRIX --------\n\n"); printMatrix(simulation.multi_small);
+    printf("\n\n-------- MULTIPLIED COMPRESSION MATRIX --------\n\n"); //printMatrix(simulation.multi_small);
     printf("\n\n-------- MATRIX OUTPUT TEST --------\n\n"); int test = testMatrix(simulation.multi_small, simulation.multi_large);
 
     freeSim(simulation);
