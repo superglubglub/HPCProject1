@@ -1,5 +1,6 @@
 #include "sparsematrix.h"
 #include "matrices.h"
+#include <omp.h>
 
 void compressValues(MultiMatrix *matrix)
 {
