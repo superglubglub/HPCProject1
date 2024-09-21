@@ -5,29 +5,20 @@ void compressValues(MultiMatrix *matrix)
 {
     matrix->values = (SparseRow*) calloc(DEFAULT_SIZE, sizeof(SparseRow));
     matrix->indexes = (SparseRow*) calloc(DEFAULT_SIZE, sizeof(SparseRow));
-    #pragma omp parallel
-    {
-        #pragma omp single
-        {
-            for (int i = 0; i < DEFAULT_SIZE; i++) {
-                #pragma omp task
-                {
-                    // create the indexes with all the space
-                    matrix->values[i] = initRow();
-                    matrix->indexes[i] = initRow();
-                    for (int j = 0; j < DEFAULT_SIZE; j++) {
-                        if (matrix->matrix[i][j] != 0) {
-                            matrix->indexes[i].col[matrix->indexes[i].size - 1] = j;
-                            matrix->values[i].col[matrix->values[i].size - 1] = matrix->matrix[i][j];
-                            matrix->indexes[i].size++; matrix->values[i].size++;
-                        }
-                    }
-                    compressRow(&matrix->values[i]);
-                    compressRow(&matrix->indexes[i]);
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            // create the indexes with all the space
+            matrix->values[i] = initRow();
+            matrix->indexes[i] = initRow();
+            for (int j = 0; j < DEFAULT_SIZE; j++) {
+                if (matrix->matrix[i][j] != 0) {
+                    matrix->indexes[i].col[matrix->indexes[i].size - 1] = j;
+                    matrix->values[i].col[matrix->values[i].size - 1] = matrix->matrix[i][j];
+                    matrix->indexes[i].size++; matrix->values[i].size++;
                 }
             }
+            compressRow(&matrix->values[i]);
+            compressRow(&matrix->indexes[i]);
         }
-    }
 }
 
 //naive matrix multiplication algorithm
@@ -78,7 +69,7 @@ int main(void)
             .matrix_size = DEFAULT_SIZE,
             .prob = DEFAULT_PROBABILITIES[i],
         };
-        printf("It broke before the simulation\n");
+        printf("Starting simulation %d of 3 with probability %.2f\n", i+1, DEFAULT_PROBABILITIES[i]);
         int failures = simulate(DEFAULT_PROBABILITIES[i]);
         if(failures > 0) {
             clock_t end = clock();
@@ -90,7 +81,7 @@ int main(void)
         clock_t end = clock();
         stats.runtime = getRuntime(start, end);
         writeLogs(fp, stats);
-        printf("\tAlgorithm passed at probability %.2f!\t\n", DEFAULT_PROBABILITIES[i]);
+        printf("Simulation %d completed in %.2f seconds\n", i+1, stats.runtime);
     }
     fclose(fp);
     printf("All tests passed!\n");

@@ -40,13 +40,11 @@ int findIndex(int index, SparseRow* indexes, SparseRow* values) {
 
 int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     int** result = (int**) calloc(DEFAULT_SIZE, sizeof(int*));
-    #pragma omp parallel for
     for(int i=0; i<DEFAULT_SIZE; i++)
     {
         result[i] = (int*) calloc(DEFAULT_SIZE, sizeof(int));
     }
 
-    #pragma omp parallel for schedule(static)
     for(int i = 0; i < DEFAULT_SIZE; i++) {
         SparseRow* a_values = &A.values[i];
         SparseRow* a_indexes = &A.indexes[i];
@@ -58,7 +56,6 @@ int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
             for(int j = 0; j < b_values->size; j++) {
                 int b_index = b_indexes->col[j];
                 int b_value = b_values->col[j];
-                #pragma omp atomic
                 result[i][b_index] += a_value * b_value;
             }
         }
