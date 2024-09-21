@@ -47,8 +47,8 @@ int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     }
     printf("\t\tAllocated %lu bytes for sparse multiplication...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
 
-    int i, j, k, b_index;
-    #pragma omp parallel for private(i, j, k, b_index) reduction(+:result[i][b_index])
+    int i, j, k;
+    #pragma omp parallel for private(i, j, k) shared(result) schedule(static)
     for(i = 0; i < DEFAULT_SIZE; i++) {
         SparseRow* a_values = &A.values[i];
         SparseRow* a_indexes = &A.indexes[i];
@@ -60,6 +60,7 @@ int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
             for(k = 0; k < b_values->size; k++) {
                 int b_index = b_indexes->col[k];
                 int b_value = b_values->col[k];
+                #pragma omp atomic
                 result[i][b_index] += a_value * b_value;
             }
         }
