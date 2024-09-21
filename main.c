@@ -1,5 +1,6 @@
 #include "sparsematrix.h"
 #include "matrices.h"
+#include <unistd.h>
 #include <omp.h>
 
 void compressValues(MultiMatrix *matrix)
@@ -61,10 +62,27 @@ int simulate(float prob, STATS* stats, FILE *fp) {
     return test;
 }
 
-int main(void)
+int main(int argc, char **argv)
 {
+    int iterations = 1;
+    int threadcount = NUM_THREADS;
+    int opt;
+    while((opt = getopt(argc, argv, "nt:")) != 1) {
+        switch(opt) {
+            case 'i':
+                iterations = atoi(optarg);
+                break;
+            case 't':
+                threadcount = atoi(optarg);
+                break;
+            default: /* '?' */
+                fprintf(stderr, "Usage: %s [-i] number of iterations [-t] max threads\n", argv[0]);
+                exit(EXIT_FAILURE);
+        }
+    }
+
     //set the number of threads
-    omp_set_num_threads(NUM_THREADS);
+    omp_set_num_threads(threadcount);
     #pragma omp parallel
     {
         #pragma omp single
