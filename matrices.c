@@ -84,7 +84,7 @@ int** multiplyMatrix(int **matrix_1, int **matrix_2) {
     } printf("\t\tAllocated %lu bytes for matrix...\n", DEFAULT_SIZE * sizeof(int) * DEFAULT_SIZE);
 
     int i, j, k, tmp;
-    #pragma omp parallel for reduction(+:tmp) schedule(dynamic, 1000)
+    #pragma omp parallel for private(i,j,k) reduction(+:tmp) schedule(dynamic, 1000)
     for (i = 0; i < DEFAULT_SIZE; i++) {
         for (j = 0; j < DEFAULT_SIZE; j++) {
             tmp = 0;
@@ -95,7 +95,7 @@ int** multiplyMatrix(int **matrix_1, int **matrix_2) {
             result[i][j] = tmp;
             //printf("[%d][%d]>",i,j);
         }
-    } printf("\n");
+    }
 
     return result;
 }
