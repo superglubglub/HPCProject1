@@ -69,7 +69,7 @@ int** multiplyMatrix(int **matrix_1, int **matrix_2) {
 
     int i, j, k;
     #pragma omp parallel for private(i, j, k) reduction(+:result[i][j])
-    for(int n = 0; n<DEFAULT_SIZE*DEFAULT_SIZE*DEFAULT_SIZE; n++){
+    for(long n = 0; n<DEFAULT_SIZE*DEFAULT_SIZE*DEFAULT_SIZE; n++){
         int i = n/(DEFAULT_SIZE*DEFAULT_SIZE);
         int j = (n%(DEFAULT_SIZE*DEFAULT_SIZE))/DEFAULT_SIZE;
         int k = (n%(DEFAULT_SIZE))%DEFAULT_SIZE;
