@@ -10,7 +10,7 @@ int** createMatrix(float prob)
 {
     int** matrix = calloc(DEFAULT_SIZE, sizeof(int*));
     int i, j;
-    #pragma omp parallel for shared(matrix) private(i, j) schedule(static)
+    #pragma omp parallel for private(j) collapse(2)
     for (i = 0; i < DEFAULT_SIZE; i++)
     {
         matrix[i] = (int*) calloc(DEFAULT_SIZE, sizeof(int));
