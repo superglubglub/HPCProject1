@@ -4,8 +4,9 @@
 
 #ifndef MATRICES_H
 #define MATRICES_H
+#include <stdint.h>
 
-int** createMatrix(float prob);
+uint8_t** createMatrix(float prob);
 void printMatrix(int** matrix);
 void freeMatrix(int **matrix);
 int testMatrix(int** matrix_1, int** matrix_2);

@@ -41,7 +41,7 @@ SparseRow initRow();
 void compressRow(SparseRow* row);
 void addSparseValue(SparseRow valueRow, SparseRow indexRow, int nextindex, int value, int index);
 void freeSparseMatrix(SparseRow* sparseMatrix);
-uint8_t** multiplySparseMatrices(MultiMatrix A, MultiMatrix B);
+int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B);
 FILE* initLogFile();
 int writeLogs(FILE *fp, STATS stats);
 int writeOperation(FILE *fp, char* funcName, STATS* stats);
