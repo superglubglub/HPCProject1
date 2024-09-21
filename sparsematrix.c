@@ -39,13 +39,9 @@ int findIndex(int index, SparseRow* indexes, SparseRow* values) {
     return 0;
 }
 
-int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
-    int** result = calloc(DEFAULT_SIZE, sizeof(int*));
-    for(int i=0; i<DEFAULT_SIZE; i++)
-    {
-        result[i] = (int*) calloc(DEFAULT_SIZE, sizeof(int));
-    }
-    printf("\t\tAllocated %lu bytes for sparse multiplication...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
+int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
+    int* result = malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
+    printf("\t\tAllocated %lu bytes for sparse multiplication...\n", sizeof(result));
 
     int i, j, k, tmp;
     #pragma omp parallel
@@ -54,17 +50,14 @@ int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
         for(i = 0; i < DEFAULT_SIZE; i++) {
             SparseRow* a_values = &A.values[i];
             SparseRow* a_indexes = &A.indexes[i];
-            for(j = 0; j < a_values->size; j++){
+            for(j = 0; j < DEFAULT_SIZE; j++){
                 tmp = 0;
-                int a_index = a_indexes->col[j];
-                int a_value = a_values->col[j];
-                SparseRow* b_values = &B.values[a_index];
-                SparseRow* b_indexes = &B.indexes[a_index];
                 for(k = 0; k < a_values->size; k++) {
-                    int b_value = findIndex(a_indexes->col[k], b_indexes, b_values);
+                    int a_value = a_values->col[k]; int a_index = a_indexes->col[k];
+                    int b_value = findIndex(a_indexes->col[k], &B.indexes[a_index], &B.values[a_index]);
                     tmp += a_value * b_value;
                 }
-                result[i][a_index] = tmp;
+                result[i * DEFAULT_SIZE + j] += tmp;
             }
         }
     }
