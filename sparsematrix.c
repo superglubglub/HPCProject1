@@ -41,7 +41,7 @@ int findIndex(int index, SparseRow* indexes, SparseRow* values) {
 
 int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     int* result = malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
-    printf("\t\tAllocated %lu bytes for sparse multiplication...\n", sizeof(result));
+    printf("\t\tAllocated %lu bytes for new matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
 
     int i, j, k, tmp;
     #pragma omp parallel
