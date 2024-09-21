@@ -41,20 +41,21 @@ int simulate(float prob) {
         .matrix_1 = {.matrix = createMatrix(prob)},
         .matrix_2 = {.matrix = createMatrix(prob)},
     };
-    printf("It broke before the matrix multiplication\n");
     simulation.multi_large = multiplyMatrix(simulation.matrix_1.matrix, simulation.matrix_2.matrix);
+
     printf("\n\n-------- MATRIX VALUES --------\n\n");
     printf("\n>> MATRIX 1 >>\n"); printMatrix(simulation.matrix_1.matrix);
     printf("\n>> MATRIX 2 >>\n"); printMatrix(simulation.matrix_2.matrix);
     printf("\n>> MULTIPLIED MATRIX >>\n"); printMatrix(simulation.multi_large);
-    printf("It broke before the matrix compression\n");
+
     compressValues(&simulation.matrix_1);
     compressValues(&simulation.matrix_2);
-    printf("It broke before the compression multiplication\n");
     simulation.multi_small = multiplySparseMatrices(simulation.matrix_1, simulation.matrix_2);
+
     printf("\n\n-------- FINAL OUTPUT VALUES --------\n\n");
     printf("\n\n-------- MULTIPLIED COMPRESSION MATRIX --------\n\n"); printMatrix(simulation.multi_small);
     printf("\n\n-------- MATRIX OUTPUT TEST --------\n\n"); int test = testMatrix(simulation.multi_small, simulation.multi_large);
+
     freeSim(simulation);
     return test;
 }
@@ -66,9 +67,7 @@ int main(void)
     omp_set_num_threads(16);
     printf("Set the number of threads to 16\n");
     for (int i = 0; i < 3; i++) {
-        printf("It broke before the clock\n");
         clock_t start = clock();
-        printf("It broke before the stats\n");
         STATS stats = {
             .num_threads = omp_get_num_threads(),
             .matrix_size = DEFAULT_SIZE,
