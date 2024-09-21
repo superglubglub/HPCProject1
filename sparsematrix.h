@@ -5,7 +5,7 @@
 #include <math.h>
 #include <time.h>
 #include <stdint.h>
-#include <omp.h>
+// #include <omp.h>
 #include "vars.h"
 
 typedef struct {
