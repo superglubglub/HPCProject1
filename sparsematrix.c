@@ -45,22 +45,19 @@ int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
         result[i] = (int*) calloc(DEFAULT_SIZE, sizeof(int));
     }
 
-    #pragma omp parallel
-    {
-        #pragma omp for
-        for(int i = 0; i < DEFAULT_SIZE; i++) {
-            SparseRow* a_values = &A.values[i];
-            SparseRow* a_indexes = &A.indexes[i];
-            for(int k = 0; k < a_values->size; k++){
-                int a_index = a_indexes->col[k];
-                int a_value = a_values->col[k];
-                SparseRow* b_values = &B.values[a_index];
-                SparseRow* b_indexes = &B.indexes[a_index];
-                for(int j = 0; j < b_values->size; j++) {
-                    int b_index = b_indexes->col[j];
-                    int b_value = b_values->col[j];
-                    result[i][b_index] += a_value * b_value;
-                }
+    #pragma omp parallel for
+    for(int i = 0; i < DEFAULT_SIZE; i++) {
+        SparseRow* a_values = &A.values[i];
+        SparseRow* a_indexes = &A.indexes[i];
+        for(int k = 0; k < a_values->size; k++){
+            int a_index = a_indexes->col[k];
+            int a_value = a_values->col[k];
+            SparseRow* b_values = &B.values[a_index];
+            SparseRow* b_indexes = &B.indexes[a_index];
+            for(int j = 0; j < b_values->size; j++) {
+                int b_index = b_indexes->col[j];
+                int b_value = b_values->col[j];
+                result[i][b_index] += a_value * b_value;
             }
         }
     }
