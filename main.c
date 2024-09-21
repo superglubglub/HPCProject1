@@ -78,6 +78,7 @@ int main(void)
                     .matrix_size = DEFAULT_SIZE,
                     .prob = DEFAULT_PROBABILITIES[i],
                     .start_time = omp_get_wtime(),
+                    .runtime = omp_get_wtime(),
                 };
                 printf("Starting simulation %d of 3 with probability %.2f\n", i+1, DEFAULT_PROBABILITIES[i]);
                 int failures = simulate(DEFAULT_PROBABILITIES[i], stats, fp);
