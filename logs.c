@@ -6,7 +6,7 @@
 
 FILE* initLogFile() {
     FILE *fp, *fopen();
-    fp = fopen("log.txt", "a+"); /*open log.txt for writing */
+    fp = fopen("log.txt", "a"); /*open log.txt for writing */
     fprintf(fp, "\n\t// NEW TEST //\t\n");
     return fp;
 }
