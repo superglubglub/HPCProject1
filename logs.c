@@ -4,10 +4,18 @@
 
 #include "sparsematrix.h"
 
+struct tm* get_time(){
+    time_t rawtime;
+    struct tm * timeinfo;
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+    return timeinfo;
+}
+
 FILE* initLogFile() {
     FILE *fp = fopen("../log.txt", "at+");
     if(!fp) fp = fopen("../log.txt", "wt");
-    fprintf(fp, "\n\t// NEW TEST //\t\n");
+    fprintf(fp, "\n\t// NEW TEST //\t - %s\t\n",asctime(get_time()));
     return fp;
 }
 
