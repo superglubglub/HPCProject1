@@ -77,7 +77,7 @@ int testMatrix(int* matrix_1, int* matrix_2) {
     return failures;
 }
 
-int** multiplyMatrix(uint8_t *matrix_1, uint8_t *matrix_2) {
+int* multiplyMatrix(uint8_t *matrix_1, uint8_t *matrix_2) {
     printf("\t\tAttempting to multiply matrices...\n");
 
     int* result = malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
