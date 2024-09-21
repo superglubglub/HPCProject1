@@ -73,7 +73,7 @@ int main(int argc, char **argv)
                 threadcount = atoi(optarg);
                 break;
             default: /* '?' */
-                fprintf(stderr, "Usage: %s [-i] number of iterations [-t] max threads\n", argv[0]);
+                printf("Usage: %s [-i] number of iterations [-t] max threads\n", argv[0]);
                 exit(EXIT_FAILURE);
         }
     }
