@@ -14,7 +14,7 @@ int** createMatrix(float prob)
     } printf("\t\tAllocated %lu bytes for new matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
 
     int i, j;
-    #pragma omp parallel for private(i, j) collapse(2)
+    #pragma omp parallel for private(j) collapse(2)
     for (i = 0; i < DEFAULT_SIZE; i++)
     {
         for (j = 0; j < DEFAULT_SIZE; j++)
