@@ -64,7 +64,7 @@ int main(int argc, char **argv)
     int iterations = 1;
     int threadcount = NUM_THREADS;
     int opt;
-    while((opt = getopt(argc, argv, "it:")) != 1) {
+    while((opt = getopt(argc, argv, "i:t:")) != 1) {
         switch(opt) {
             case 'i':
                 iterations = atoi(optarg);
