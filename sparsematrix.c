@@ -12,7 +12,7 @@ SparseRow initRow() {
 void compressRow(SparseRow* row) {
     int* tmp = realloc(row->col, sizeof(int) * row->size);
     row->col = tmp;
-    printf("\t\tCompressed row from %d down to %lu bytes...", DEFAULT_SIZE, row->size);
+    printf("\t\tCompressed row from %d down to %lu bytes...\n", DEFAULT_SIZE, row->size);
 }
 
 void freeSparseMatrix(SparseRow* matrix) {
