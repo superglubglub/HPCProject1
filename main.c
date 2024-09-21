@@ -39,8 +39,9 @@ int simulate(float prob) {
     SIM simulation = {
         .matrix_1 = {.matrix = createMatrix(prob)},
         .matrix_2 = {.matrix = createMatrix(prob)},
-    };
+    }; printf("Made matrices...\n");
     simulation.multi_large = multiplyMatrix(simulation.matrix_1.matrix, simulation.matrix_2.matrix);
+    printf("Multiplied matrices...\n");
 
     printf("\n\n-------- MATRIX VALUES --------\n\n");
     printf("\n>> MATRIX 1 >>\n"); printMatrix(simulation.matrix_1.matrix);
