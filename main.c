@@ -24,8 +24,8 @@ void compressValues(MultiMatrix *matrix)
 }
 
 void freeSim(SIM s) {
-    freeMatrix(s.matrix_1.matrix);
-    freeMatrix(s.matrix_2.matrix);
+    freeMiniMatrix(s.matrix_1.matrix);
+    freeMiniMatrix(s.matrix_2.matrix);
     freeMatrix(s.multi_large);
     freeSparseMatrix(s.matrix_1.values);
     freeSparseMatrix(s.matrix_1.indexes);

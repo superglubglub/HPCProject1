@@ -53,6 +53,13 @@ void printMatrix(int** matrix) {
     printf("\n\n\n______________\n\n\n");
 }
 
+void freeMiniMatrix(uint8_t **matrix) {
+#pragma omp parallel for
+    for (int i = 0; i < DEFAULT_SIZE; i++) {
+        free(matrix[i]);
+    } free(matrix);
+}
+
 void freeMatrix(int **matrix) {
     #pragma omp parallel for
     for (int i = 0; i < DEFAULT_SIZE; i++) {
