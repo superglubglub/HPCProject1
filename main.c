@@ -12,9 +12,9 @@ void compressValues(MultiMatrix *matrix)
             matrix->values[i] = initRow();
             matrix->indexes[i] = initRow();
             for (int j = 0; j < DEFAULT_SIZE; j++) {
-                if (matrix->matrix[i][j] != 0) {
+                if (matrix->matrix[i * DEFAULT_SIZE + j] != 0) {
                     matrix->indexes[i].col[matrix->indexes[i].size - 1] = j;
-                    matrix->values[i].col[matrix->values[i].size - 1] = matrix->matrix[i][j];
+                    matrix->values[i].col[matrix->values[i].size - 1] = matrix->matrix[i * DEFAULT_SIZE + j];
                     matrix->indexes[i].size++; matrix->values[i].size++;
                 }
             }
