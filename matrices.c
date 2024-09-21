@@ -29,7 +29,7 @@ uint8_t** createMatrix(float prob)
     #pragma omp parallel
     {
         uint32_t seed = time(NULL) ^ omp_get_thread_num();
-        #pragma omp parallel for schedule(dynamic, 1000)
+        #pragma omp parallel for schedule(static, BLOCK_SIZE)
         for (int i = 0; i < DEFAULT_SIZE; i++){
             for (int j = 0; j < DEFAULT_SIZE; j++){
                 uint32_t rand_val = xorshift32(&seed);
@@ -91,7 +91,7 @@ int** multiplyMatrix(uint8_t **matrix_1, uint8_t **matrix_2) {
     } printf("\t\tAllocated %lu bytes for matrix...\n", DEFAULT_SIZE * sizeof(int) * DEFAULT_SIZE);
 
     int i, j, k, tmp;
-    #pragma omp parallel for private(i,j,k) reduction(+:tmp) schedule(dynamic, 1)
+    #pragma omp parallel for private(i,j,k) reduction(+:tmp) schedule(static, BLOCK_SIZE)
     for (i = 0; i < DEFAULT_SIZE; i++) {
         for (j = 0; j < DEFAULT_SIZE; j++) {
             tmp = 0;
