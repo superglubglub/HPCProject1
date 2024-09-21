@@ -19,10 +19,10 @@ uint32_t xorshift32(uint32_t *state) {
 
 int** createMatrix(float prob)
 {
-    int** matrix = calloc(DEFAULT_SIZE, sizeof(int*));
+    uint8_t** matrix = calloc(DEFAULT_SIZE, sizeof(uint8_t*));
     for (int i = 0; i < DEFAULT_SIZE; i++){
-        matrix[i] = (int*) calloc(DEFAULT_SIZE, sizeof(int));
-    } printf("\t\tAllocated %lu bytes for new matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
+        matrix[i] = (uint8_t*) calloc(DEFAULT_SIZE, sizeof(uint8_t));
+    } printf("\t\tAllocated %lu bytes for new matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
 
     const uint32_t threshold = (uint32_t)(prob * UINT_MAX);
 
