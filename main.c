@@ -36,7 +36,6 @@ void freeSim(SIM s) {
 }
 
 int simulate(float prob) {
-    printf("It broke before the matrix creation\n");
     SIM simulation = {
         .matrix_1 = {.matrix = createMatrix(prob)},
         .matrix_2 = {.matrix = createMatrix(prob)},
