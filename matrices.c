@@ -96,7 +96,10 @@ int** multiplyMatrix(uint8_t **matrix_1, uint8_t **matrix_2) {
         for (j = 0; j < DEFAULT_SIZE; j++) {
             tmp = 0;
             for (k = 0; k < DEFAULT_SIZE; k++) {
-                 tmp += matrix_1[i][k] * matrix_2[k][j];
+                if(matrix_1[i][k] == 0 || matrix_2[k][k] == 0) {
+                    continue;
+                }
+                tmp += matrix_1[i][k] * matrix_2[k][j];
                 //printf("%2d",omp_get_thread_num());
             }
             result[i][j] = tmp;
