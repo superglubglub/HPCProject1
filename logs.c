@@ -13,20 +13,20 @@ FILE* initLogFile() {
 
 int writeLogs(FILE *fp, STATS stats) {
     fprintf(fp,
-        "-----\nMatrix Size: %d\nMatrix Prob: %.2f\nNumber of Threads: %d\nRuntime: %fms\n-----",
-        stats.matrix_size, stats.prob, stats.num_threads, stats.runtime * 1000);
+        "-----\nMatrix Size: %d\nMatrix Prob: %.6f\nNumber of Threads: %d\nRuntime: %fms\n-----",
+        stats.matrix_size, stats.prob, stats.num_threads, stats.runtime);
     return 0;
 }
 
 int writeFailure(FILE *fp, STATS stats) {
     fprintf(fp,
-        "\n\n!!! FAILURE !!!\n\n-----\nMatrix Size: %d\nMatrix Prob: %.2f\nNumber of Threads: %d\nRuntime: %fms\n-----",
-        stats.matrix_size, stats.prob, stats.num_threads, stats.runtime * 1000);
+        "\n\n!!! FAILURE !!!\n\n-----\nMatrix Size: %d\nMatrix Prob: %.6f\nNumber of Threads: %d\nRuntime: %fms\n-----",
+        stats.matrix_size, stats.prob, stats.num_threads, stats.runtime);
     return 0;
 }
 
-double getRuntime(clock_t start, clock_t end) {
-    return (double) end - start / CLOCKS_PER_SEC;
+double getRuntime(double start, double end) {
+    return end - start;
 }
 
 

@@ -67,7 +67,7 @@ int main(void)
     omp_set_num_threads(16);
     printf("Set the number of threads to 16\n");
     for (int i = 0; i < 3; i++) {
-        clock_t start = clock();
+        double start = omp_get_wtime();
         STATS stats = {
             .num_threads = omp_get_num_threads(),
             .matrix_size = DEFAULT_SIZE,
@@ -75,14 +75,13 @@ int main(void)
         };
         printf("Starting simulation %d of 3 with probability %.2f\n", i+1, DEFAULT_PROBABILITIES[i]);
         int failures = simulate(DEFAULT_PROBABILITIES[i]);
+        double end = omp_get_wtime();
         if(failures > 0) {
-            clock_t end = clock();
             stats.runtime = getRuntime(start, end);
             printf("Matrix algorithm failed with %d errors!\n", failures);
             writeFailure(fp, stats);
             return 1;
         }
-        clock_t end = clock();
         stats.runtime = getRuntime(start, end);
         writeLogs(fp, stats);
         printf("Simulation %d completed in %.2f seconds\n", i+1, stats.runtime);
