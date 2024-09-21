@@ -28,7 +28,7 @@ int writeFailure(FILE *fp, STATS stats) {
 int writeOperation(FILE *fp, char* funcName, STATS stats) {
     double runtime = getRuntime(stats.runtime, omp_get_wtime());
     fprintf(fp,
-        "\tPerformed %s in %.6fs",
+        "\tPerformed %s in %.6fs\n",
         funcName, runtime);
     stats.runtime += runtime;
     return 0;
