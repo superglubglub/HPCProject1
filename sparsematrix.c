@@ -53,14 +53,12 @@ int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
         SparseRow* a_values = &A.values[i];
         SparseRow* a_indexes = &A.indexes[i];
         for(j = 0; j < DEFAULT_SIZE; j++){
-            tmp = 0;
-            int a_index = a_indexes->col[j];
-            int a_value = a_values->col[j];
-            SparseRow* b_values = &B.values[a_index];
-            SparseRow* b_indexes = &B.indexes[a_index];
             for(k = 0; k < a_values->size; k++) {
+                tmp = 0;
+                int a_index = a_indexes->col[j]; int a_value = a_values->col[j];
+                SparseRow* b_values = &B.values[a_index]; SparseRow* b_indexes = &B.indexes[a_index];
                 int b_value = findIndex(j, b_indexes, b_values);
-                tmp += a_value * b_value;
+                tmp += (a_value * b_value);
             }
             result[i][j] = tmp;
         }
