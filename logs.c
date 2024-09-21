@@ -12,14 +12,14 @@ FILE* initLogFile() {
 
 int writeLogs(FILE *fp, STATS stats) {
     fprintf(fp,
-        "-----\nMatrix Size: %d\nMatrix Prob: %.6f\nNumber of Threads: %d\nRuntime: %fms\n-----",
+        "-----\nMatrix Size: %d\nMatrix Prob: %.6f\nNumber of Threads: %d\nRuntime: %fms\n-----\n",
         stats.matrix_size, stats.prob, stats.num_threads, stats.runtime);
     return 0;
 }
 
 int writeFailure(FILE *fp, STATS stats) {
     fprintf(fp,
-        "\n\n!!! FAILURE !!!\n\n-----\nMatrix Size: %d\nMatrix Prob: %.6f\nNumber of Threads: %d\nRuntime: %fms\n-----",
+        "\n\n!!! FAILURE !!!\n\n-----\nMatrix Size: %d\nMatrix Prob: %.6f\nNumber of Threads: %d\nRuntime: %fms\n-----\n",
         stats.matrix_size, stats.prob, stats.num_threads, stats.runtime);
     return 0;
 }
