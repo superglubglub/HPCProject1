@@ -66,10 +66,11 @@ int** multiplyMatrix(int **matrix_1, int **matrix_2) {
 
     for (int i = 0; i < DEFAULT_SIZE; i++) {
         for (int j = 0; j < DEFAULT_SIZE; j++) {
-            #pragma omp parallel for ordered schedule(static)
+            #pragma omp parallel for
             for (int k = 0; k < DEFAULT_SIZE; k++) {
                 #pragma omp critical
                 result[i][j] += matrix_1[i][k] * matrix_2[k][j];
+                printf("%2d",omp_get_thread_num());
             }
             printf("[%d][%d]>",i,j);
         }
