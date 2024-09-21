@@ -9,11 +9,14 @@
 int** createMatrix(float prob)
 {
     int** matrix = calloc(DEFAULT_SIZE, sizeof(int*));
+    for (int i = 0; i < DEFAULT_SIZE; i++){
+        matrix[i] = (int*) calloc(DEFAULT_SIZE, sizeof(int));
+    } printf("\t\tAllocated %lu bytes for new matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
+
     int i, j;
-    #pragma omp parallel for private(j) collapse(2)
+    #pragma omp parallel for private(i, j) collapse(2)
     for (i = 0; i < DEFAULT_SIZE; i++)
     {
-        matrix[i] = (int*) calloc(DEFAULT_SIZE, sizeof(int));
         for (j = 0; j < DEFAULT_SIZE; j++)
         {
             if( rand() % LIMIT < (int)LIMIT * prob) {
@@ -21,7 +24,6 @@ int** createMatrix(float prob)
             }
         }
     }
-    printf("\t\tAllocated %lu bytes for new matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
     return matrix;
 }
 
