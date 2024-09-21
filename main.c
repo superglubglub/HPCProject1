@@ -81,10 +81,6 @@ int main(int argc, char **argv)
 
     //set the number of threads
     omp_set_num_threads(threadcount);
-    #pragma omp parallel
-    {
-      printf("Set the number of threads to %d\n",omp_get_num_threads());
-    }
     FILE *fp = initLogFile();
     for (int i = 0; i < 3; i++) {
 
