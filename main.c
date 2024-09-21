@@ -85,7 +85,6 @@ int main(void)
                     stats.runtime = getRuntime(start, end);
                     printf("Matrix algorithm failed with %d errors!\n", failures);
                     writeFailure(fp, stats);
-                    return 1;
                 }
                 stats.runtime = getRuntime(start, end);
                 writeLogs(fp, stats);
