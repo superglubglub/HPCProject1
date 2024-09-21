@@ -5,6 +5,17 @@
 #include "matrices.h"
 #include "sparsematrix.h"
 #include <omp.h>
+#include <limits.h>
+
+// Xorshift32 PRNG
+uint32_t xorshift32(uint32_t *state) {
+    uint32_t x = *state;
+    x ^= x << 13;
+    x ^= x >> 17;
+    x ^= x << 5;
+    *state = x;
+    return x;
+}
 
 int** createMatrix(float prob)
 {
@@ -13,17 +24,22 @@ int** createMatrix(float prob)
         matrix[i] = (int*) calloc(DEFAULT_SIZE, sizeof(int));
     } printf("\t\tAllocated %lu bytes for new matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
 
-    int i, j;
-    #pragma omp parallel for private(i, j) schedule(dynamic, 1000)
-    for (i = 0; i < DEFAULT_SIZE; i++)
+    const uint32_t threshold = (uint32_t)(prob * UINT_MAX);
+
+    #pragma omp parallel
     {
-        for (j = 0; j < DEFAULT_SIZE; j++)
-        {
-            if( rand() % RAND_RANGE < (int) RAND_RANGE * prob) {
-                matrix[i][j] = rand() % LIMIT;
+        uint32_t seed = time(NULL) ^ omp_get_thread_num();
+        #pragma omp parallel for schedule(dynamic, 1000)
+        for (int i = 0; i < DEFAULT_SIZE; i++){
+            for (int j = 0; j < DEFAULT_SIZE; j++){
+                uint32_t rand_val = xorshift32(&seed);
+                if(rand_val < threshold) {
+                    matrix[i][j] = (rand_val % 9) + 1;
+                }
             }
         }
     }
+
     return matrix;
 }
 
@@ -68,7 +84,7 @@ int** multiplyMatrix(int **matrix_1, int **matrix_2) {
     } printf("\t\tAllocated %lu bytes for matrix...\n", DEFAULT_SIZE * sizeof(int) * DEFAULT_SIZE);
 
     int i, j, k, tmp;
-    #pragma omp parallel for collapse(2) reduction(+:tmp) schedule(dynamic, 1000)
+    #pragma omp parallel for reduction(+:tmp) schedule(dynamic, 1000)
     for (i = 0; i < DEFAULT_SIZE; i++) {
         for (j = 0; j < DEFAULT_SIZE; j++) {
             tmp = 0;
