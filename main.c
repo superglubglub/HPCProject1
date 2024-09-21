@@ -90,7 +90,7 @@ int main(int argc, char **argv)
 
         double start = omp_get_wtime();
         STATS stats = {
-            .num_threads = omp_get_num_threads(),
+            .num_threads = threadcount,
             .matrix_size = DEFAULT_SIZE,
             .prob = DEFAULT_PROBABILITIES[i],
             .start_time = omp_get_wtime(),
