@@ -19,11 +19,8 @@ int** createMatrix(float prob)
     {
         for (j = 0; j < DEFAULT_SIZE; j++)
         {
-            if( rand() % LIMIT < (int)LIMIT * prob) {
+            if( rand() % RAND_MAX < RAND_MAX * prob) {
                 matrix[i][j] = rand() % LIMIT;
-                if(matrix[i][j] == 0) {
-                    matrix[i][j] = 1;
-                }
             }
         }
     }
