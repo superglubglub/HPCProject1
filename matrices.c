@@ -79,7 +79,7 @@ int** multiplyMatrix(int **matrix_1, int **matrix_2) {
             result[i][j] = tmp;
             //printf("[%d][%d]>",i,j);
         }
-    } printf("\n"); */
+    } printf("\n");
 
     return result;
 }
