@@ -69,25 +69,15 @@ int** multiplyMatrix(int **matrix_1, int **matrix_2) {
 
     int i, j, k;
     #pragma omp parallel for private(i, j, k) reduction(+:result[i][j])
-    for(long n = 0; n<(long)DEFAULT_SIZE*DEFAULT_SIZE*DEFAULT_SIZE; n++){
-        int i = n/(DEFAULT_SIZE*DEFAULT_SIZE);
-        int j = (n%(DEFAULT_SIZE*DEFAULT_SIZE))/DEFAULT_SIZE;
-        int k = (n%(DEFAULT_SIZE))%DEFAULT_SIZE;
-        result[i][j] += matrix_1[i][k] * matrix_2[k][j];
-    }
-
-    /*
     for (i = 0; i < DEFAULT_SIZE; i++) {
         for (j = 0; j < DEFAULT_SIZE; j++) {
-            tmp = 0;
             for (k = 0; k < DEFAULT_SIZE; k++) {
-                 tmp += matrix_1[i][k] * matrix_2[k][j];
+                 result[i][j] += matrix_1[i][k] * matrix_2[k][j];
                 //printf("%2d",omp_get_thread_num());
             }
-            result[i][j] = tmp;
             //printf("[%d][%d]>",i,j);
         }
-    } printf("\n"); */
+    }
 
     return result;
 }
