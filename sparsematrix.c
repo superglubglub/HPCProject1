@@ -10,7 +10,7 @@ SparseRow initRow() {
 }
 
 void compressRow(SparseRow* row) {
-    uint8_t* tmp = realloc(row->col, sizeof(uint8_t) * row->size);
+    uint8_t* tmp = realloc(&row->col, sizeof(uint8_t) * row->size);
     row->col = tmp;
 }
 
