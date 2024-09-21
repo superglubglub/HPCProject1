@@ -53,16 +53,16 @@ int testMatrix(int** matrix_1, int** matrix_2) {
 }
 
 int** multiplyMatrix(int **matrix_1, int **matrix_2) {
-    printf("Attempting to multply matrices...\n");
+    printf("Attempting to multiply matrices...\n");
     int** result = calloc(DEFAULT_SIZE, sizeof(int*));
     printf("Allocated %d bytes for matrix rows...\n", DEFAULT_SIZE * sizeof(int*));
     for (int i = 0; i < DEFAULT_SIZE; i++) {
         result[i] = calloc(DEFAULT_SIZE, sizeof(int));
     } printf("Allocated %d bytes for matrix columns...\n", DEFAULT_SIZE * sizeof(int) * DEFAULT_SIZE);
 
+    #pragma omp parallel for //ordered reduction (+:result[i][j])
     for (int i = 0; i < DEFAULT_SIZE; i++) {
         for (int j = 0; j < DEFAULT_SIZE; j++) {
-            #pragma omp parallel for ordered reduction (+:result[i][j])
             for (int k = 0; k < DEFAULT_SIZE; k++) {
                 result[i][j] += matrix_1[i][k] * matrix_2[k][j];
             }
