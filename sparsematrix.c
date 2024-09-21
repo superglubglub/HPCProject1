@@ -54,7 +54,7 @@ int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
         SparseRow* a_indexes = &A.indexes[i];
         for(j = 0; j < DEFAULT_SIZE; j++){
             for(k = 0; k < a_values->size; k++) {
-                int a_index = a_indexes->col[j]; int a_value = a_values->col[j];
+                int a_index = a_indexes->col[k]; int a_value = a_values->col[k];
                 SparseRow* b_values = &B.values[a_index]; SparseRow* b_indexes = &B.indexes[a_index];
                 int b_value = findIndex(j, b_indexes, b_values);
                 #pragma omp atomic
