@@ -45,6 +45,6 @@ int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B);
 FILE* initLogFile();
 int writeLogs(FILE *fp, STATS stats);
 int writeFailure(FILE *fp, STATS stats);
-double getRuntime(clock_t start, clock_t end);
+double getRuntime(double start, double end);
 
 #endif //CMATRIX_H
