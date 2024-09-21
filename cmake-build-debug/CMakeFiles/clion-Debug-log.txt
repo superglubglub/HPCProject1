@@ -1,0 +1,4 @@
+/Users/maxy/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -S /Users/maxy/CLionProjects/HPCProject1 -B /Users/maxy/CLionProjects/HPCProject1/cmake-build-debug
+-- Configuring done (0.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/maxy/CLionProjects/HPCProject1/cmake-build-debug
