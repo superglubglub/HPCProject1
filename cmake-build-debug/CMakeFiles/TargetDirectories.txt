@@ -1,3 +1,0 @@
-/Users/maxy/CLionProjects/HPCProject1/cmake-build-debug/CMakeFiles/HPCProject1.dir
-/Users/maxy/CLionProjects/HPCProject1/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/maxy/CLionProjects/HPCProject1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
