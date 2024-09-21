@@ -63,13 +63,14 @@ int main(void)
 {
     FILE *fp = initLogFile();
     //set the number of threads
-    //omp_set_num_threads(16);
+    omp_set_num_threads(16);
+    printf("Set the number of threads to 16\n");
     for (int i = 0; i < 3; i++) {
         printf("It broke before the clock\n");
         clock_t start = clock();
         printf("It broke before the stats\n");
         STATS stats = {
-            .num_threads = 1, //omp_get_num_threads(),
+            .num_threads = omp_get_num_threads(),
             .matrix_size = DEFAULT_SIZE,
             .prob = DEFAULT_PROBABILITIES[i],
         };
