@@ -1,4 +1,5 @@
 #include "sparsematrix.h"
+#include <omp.h>
 
 //initialise the crow with calloc'd values
 SparseRow initRow() {

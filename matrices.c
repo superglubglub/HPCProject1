@@ -4,6 +4,7 @@
 
 #include "matrices.h"
 #include "sparsematrix.h"
+#include <omp.h>
 
 int** createMatrix(float prob)
 {
