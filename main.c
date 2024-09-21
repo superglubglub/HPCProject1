@@ -83,32 +83,29 @@ int main(int argc, char **argv)
     omp_set_num_threads(threadcount);
     #pragma omp parallel
     {
-        #pragma omp single
-        {
-            printf("Set the number of threads to %d\n",omp_get_num_threads());
-            for (int i = 0; i < 3; i++) {
-                FILE *fp = initLogFile();
-                double start = omp_get_wtime();
-                STATS stats = {
-                    .num_threads = omp_get_num_threads(),
-                    .matrix_size = DEFAULT_SIZE,
-                    .prob = DEFAULT_PROBABILITIES[i],
-                    .start_time = omp_get_wtime(),
-                    .runtime = omp_get_wtime(),
-                };
-                printf("Starting simulation %d of 3 with probability %.2f\n", i+1, DEFAULT_PROBABILITIES[i]);
-                writeLogs(fp, stats);
-                int failures = simulate(DEFAULT_PROBABILITIES[i], &stats, fp);
-                double end = omp_get_wtime();
-                stats.runtime = getRuntime(start, end);
-                if(failures > 0) {
-                    printf("Matrix algorithm failed with %d errors!\n", failures);
-                    writeFailure(fp, stats);
-                }
-                closeLogs(fp, stats);
-                printf("Simulation %d completed in %.2f seconds\n", i+1, stats.runtime);
-            }
+      printf("Set the number of threads to %d\n",omp_get_num_threads());
+    }
+    for (int i = 0; i < 3; i++) {
+        FILE *fp = initLogFile();
+        double start = omp_get_wtime();
+        STATS stats = {
+            .num_threads = omp_get_num_threads(),
+            .matrix_size = DEFAULT_SIZE,
+            .prob = DEFAULT_PROBABILITIES[i],
+            .start_time = omp_get_wtime(),
+            .runtime = omp_get_wtime(),
+        };
+        printf("Starting simulation %d of 3 with probability %.2f\n", i+1, DEFAULT_PROBABILITIES[i]);
+        writeLogs(fp, stats);
+        int failures = simulate(DEFAULT_PROBABILITIES[i], &stats, fp);
+        double end = omp_get_wtime();
+        stats.runtime = getRuntime(start, end);
+        if(failures > 0) {
+            printf("Matrix algorithm failed with %d errors!\n", failures);
+            writeFailure(fp, stats);
         }
+        closeLogs(fp, stats);
+        printf("Simulation %d completed in %.2f seconds\n", i+1, stats.runtime);
     }
     printf("All tests passed!\n");
     exit(0);
