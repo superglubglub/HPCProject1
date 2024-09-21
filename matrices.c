@@ -13,11 +13,10 @@ int** createMatrix(float prob)
         matrix[i] = (int*) calloc(DEFAULT_SIZE, sizeof(int));
     } printf("\t\tAllocated %lu bytes for new matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
 
-    int i, j;
-    #pragma omp parallel for private(i, j) shared(matrix) collapse(2) schedule(dynamic)
-    for (i = 0; i < DEFAULT_SIZE; i++)
+    #pragma omp parallel for collapse(2)
+    for (int i = 0; i < DEFAULT_SIZE; i++)
     {
-        for (j = 0; j < DEFAULT_SIZE; j++)
+        for (int j = 0; j < DEFAULT_SIZE; j++)
         {
             if( rand() % RAND_RANGE < (int) RAND_RANGE * prob) {
                 matrix[i][j] = rand() % LIMIT;
@@ -66,16 +65,17 @@ int** multiplyMatrix(int **matrix_1, int **matrix_2) {
     for (int i = 0; i < DEFAULT_SIZE; i++) {
         result[i] = calloc(DEFAULT_SIZE, sizeof(int));
     } printf("\t\tAllocated %lu bytes for matrix...\n", DEFAULT_SIZE * sizeof(int) * DEFAULT_SIZE);
-    int i, j, k, tmp;
-    #pragma omp parallel for private(i, j, k) reduction(+:tmp) schedule(static, (int)DEFAULT_SIZE/100)
+
+    int i, j, k; //tmp;
+    #pragma omp parallel for collapse(2)
     for (i = 0; i < DEFAULT_SIZE; i++) {
         for (j = 0; j < DEFAULT_SIZE; j++) {
-            tmp = 0;
+            //tmp = 0;
             for (k = 0; k < DEFAULT_SIZE; k++) {
-                 tmp += matrix_1[i][k] * matrix_2[k][j];
+                 result[i][j] += matrix_1[i][k] * matrix_2[k][j];
                 //printf("%2d",omp_get_thread_num());
             }
-            result[i][j] = tmp;
+            //result[i][j] = tmp;
             //printf("[%d][%d]>",i,j);
         }
     } printf("\n");
