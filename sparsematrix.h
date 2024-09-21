@@ -32,8 +32,8 @@ typedef struct {
 typedef struct {
     MultiMatrix matrix_1;
     MultiMatrix matrix_2;
-    int** multi_large;
-    int** multi_small;
+    int* multi_large;
+    int* multi_small;
 } SIM;
 
 //crow shit
