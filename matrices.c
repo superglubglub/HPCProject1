@@ -62,7 +62,7 @@ int** multiplyMatrix(int **matrix_1, int **matrix_2) {
 
     for (int i = 0; i < DEFAULT_SIZE; i++) {
         for (int j = 0; j < DEFAULT_SIZE; j++) {
-            #pragma omp parallel for reduction (+:result[i][j])
+            #pragma omp parallel for ordered reduction (+:result[i][j])
             for (int k = 0; k < DEFAULT_SIZE; k++) {
                 result[i][j] += matrix_1[i][k] * matrix_2[k][j];
             }
