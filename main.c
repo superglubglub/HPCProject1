@@ -63,13 +63,13 @@ int simulate(float prob) {
 
 int main(void)
 {
-    FILE *fp = initLogFile();
     //set the number of threads
     omp_set_num_threads(NUM_THREADS);
     #pragma omp parallel
     {
         #pragma omp single
         {
+            FILE *fp = initLogFile();
             printf("Set the number of threads to %d\n",omp_get_num_threads());
             for (int i = 0; i < 3; i++) {
                 double start = omp_get_wtime();
@@ -90,10 +90,10 @@ int main(void)
                 writeLogs(fp, stats);
                 printf("Simulation %d completed in %.2f seconds\n", i+1, stats.runtime);
                 fflush(fp);
+                fclose(fp);
             }
         }
     }
-    fclose(fp);
     printf("All tests passed!\n");
     exit(0);
 }

@@ -47,7 +47,7 @@ int testMatrix(int** matrix_1, int** matrix_2) {
             } else {
                 //printf("[%d == %d] PASS\t", matrix_1[i][j], matrix_2[i][j]);
             }
-        } printf("\n");
+        } //printf("\n");
     }
     return failures;
 }
