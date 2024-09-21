@@ -9,11 +9,12 @@
 int** createMatrix(float prob)
 {
     int** matrix = calloc(DEFAULT_SIZE, sizeof(int*));
-    for (int i = 0; i < DEFAULT_SIZE; i++)
+    int i, j;
+    #pragma omp parallel for shared(matrix) private(i, j)
+    for (i = 0; i < DEFAULT_SIZE; i++)
     {
         matrix[i] = (int*) calloc(DEFAULT_SIZE, sizeof(int));
-        #pragma omp parallel for
-        for (int j = 0; j < DEFAULT_SIZE; j++)
+        for (j = 0; j < DEFAULT_SIZE; j++)
         {
             if( rand() % LIMIT < (int)LIMIT * prob) {
                 matrix[i][j] = rand() % LIMIT;
