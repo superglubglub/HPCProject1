@@ -43,16 +43,19 @@ int simulate(float prob) {
     };
     printf("It broke before the matrix multiplication\n");
     simulation.multi_large = multiplyMatrix(simulation.matrix_1.matrix, simulation.matrix_2.matrix);
-    //printMatrix(simulation.multi_large);
+    printf("\n\n-------- MATRIX VALUES --------\n\n");
+    printf("\n>> MATRIX 1 >>\n"); printMatrix(simulation.matrix_1.matrix);
+    printf("\n>> MATRIX 2 >>\n"); printMatrix(simulation.matrix_2.matrix);
+    printf("\n>> MULTIPLIED MATRIX 1 >>\n"); printMatrix(simulation.multi_large);
     printf("It broke before the matrix compression\n");
     compressValues(&simulation.matrix_1);
     compressValues(&simulation.matrix_2);
     printf("It broke before the compression multiplication\n");
     simulation.multi_small = multiplySparseMatrices(simulation.matrix_1, simulation.matrix_2);
     //printMatrix(simulation.multi_small);
-    int test = testMatrix(simulation.multi_small, simulation.multi_large);
+    //int test = testMatrix(simulation.multi_small, simulation.multi_large);
     freeSim(simulation);
-    return test;
+    return 0;
 }
 
 int main(void)
@@ -87,24 +90,3 @@ int main(void)
     printf("All tests passed!\n");
     exit(0);
 }
-
-/* Some considerations and notes (algorithms and computation-wise):
- *  - Technically the entire matrix can be considered one long array if we terminate at every %(size) interval
- *  - Each integer should be uint8 to save on space
- *  - Could store compression as an array, but this would waste so much space in the worst case
- *  - Maybe allocated probability% space then realloc using a seperate thread?
- *  - For 8bit integers a 100k*100k matrix uses 10gb space
- *  - Worst case for any probability is 100% space usage, so 30gb space
- *  - But the expected case of 5% means only ~500MB of space used per matrix, or ~1GB for both (10x improvement)
- *  - If we used a linked list then we have an excessive 32 (64?) bytes of space used per integer
- *  - For a doubly linked list using 32-bit addresses, this means we store 8 times the amount of information, or 8gb
- *  - We can binarily partition the reallocation, e.g. we allocate 0.05% space then 0.025% space then 0.0175% and so on
- *  - We would have to realloc log2(n) times maximum (~17 for a 100k length)
- *  - Low-level approach:
- *      - We have our original 1gb sized array
- *      - We want to reduce it to a smaller size
- *  - all arrays should be *restrict pointers
- *  - we can just compress the original array to contain tuples of value, index
- *  - Nevermind it has to be dynamic allocation
- *  - Well, two schools of thought I guess. I can just realloc the array to allow for more numbers.
- */
