@@ -64,8 +64,8 @@ int main(void)
 {
     FILE *fp = initLogFile();
     //set the number of threads
-    omp_set_num_threads(16);
-    printf("Set the number of threads to 16\n");
+    omp_set_num_threads(NUM_THREADS);
+    printf("Set the number of threads to %d\n",omp_get_num_threads());
     for (int i = 0; i < 3; i++) {
         double start = omp_get_wtime();
         STATS stats = {
