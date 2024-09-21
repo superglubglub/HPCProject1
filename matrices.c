@@ -11,6 +11,7 @@ int** createMatrix(float prob)
     for (int i = 0; i < DEFAULT_SIZE; i++)
     {
         matrix[i] = (int*) calloc(DEFAULT_SIZE, sizeof(int));
+        #pragma omp parallel for
         for (int j = 0; j < DEFAULT_SIZE; j++)
         {
             if( rand() % LIMIT < (int)LIMIT * prob) {
@@ -18,6 +19,7 @@ int** createMatrix(float prob)
             }
         }
     }
+    printf("\t\tAllocated %lu bytes for new matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
     return matrix;
 }
 
@@ -32,6 +34,7 @@ void printMatrix(int** matrix) {
 }
 
 void freeMatrix(int **matrix) {
+    #pragma omp parallel for
     for (int i = 0; i < DEFAULT_SIZE; i++) {
         free(matrix[i]);
     } free(matrix);
@@ -39,6 +42,7 @@ void freeMatrix(int **matrix) {
 
 int testMatrix(int** matrix_1, int** matrix_2) {
     int failures = 0;
+    #pragma omp parallel for
     for (int i = 0; i < DEFAULT_SIZE; i++) {
         for (int j = 0; j < DEFAULT_SIZE; j++) {
             if (matrix_1[i][j] != matrix_2[i][j]) {

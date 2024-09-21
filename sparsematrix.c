@@ -58,7 +58,8 @@ int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
             for(int j = 0; j < b_values->size; j++) {
                 int b_index = b_indexes->col[j];
                 int b_value = b_values->col[j];
-                result[i][b_index] += a_value * b_value;
+                #pragma omp critical
+                    result[i][b_index] += a_value * b_value;
             }
         }
     }
