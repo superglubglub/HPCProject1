@@ -35,11 +35,12 @@ int closeLogs(FILE *fp, STATS stats) {
 }
 
 int writeOperation(FILE *fp, char* funcName, STATS* stats) {
-    stats->runtime = getRuntime(stats->runtime, omp_get_wtime());
+    double operationTime = getRuntime(stats->start_time, omp_get_wtime());
     fprintf(fp,
         "\tPerformed %s in %fs\n",
-        funcName, stats->runtime);
+        funcName,getRuntime(stats->runtime, operationTime));
     fflush(fp);
+    stats->runtime = operationTime;
     return 0;
 }
 
