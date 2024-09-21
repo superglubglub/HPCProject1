@@ -46,16 +46,17 @@ int simulate(float prob) {
     printf("\n\n-------- MATRIX VALUES --------\n\n");
     printf("\n>> MATRIX 1 >>\n"); printMatrix(simulation.matrix_1.matrix);
     printf("\n>> MATRIX 2 >>\n"); printMatrix(simulation.matrix_2.matrix);
-    printf("\n>> MULTIPLIED MATRIX 1 >>\n"); printMatrix(simulation.multi_large);
+    printf("\n>> MULTIPLIED MATRIX >>\n"); printMatrix(simulation.multi_large);
     printf("It broke before the matrix compression\n");
     compressValues(&simulation.matrix_1);
     compressValues(&simulation.matrix_2);
     printf("It broke before the compression multiplication\n");
     simulation.multi_small = multiplySparseMatrices(simulation.matrix_1, simulation.matrix_2);
-    //printMatrix(simulation.multi_small);
-    //int test = testMatrix(simulation.multi_small, simulation.multi_large);
+    printf("\n\n-------- FINAL OUTPUT VALUES --------\n\n");
+    printf("\n\n-------- MULTIPLIED COMPRESSION MATRIX --------\n\n"); printMatrix(simulation.multi_small);
+    printf("\n\n-------- MATRIX OUTPUT TEST --------\n\n"); int test = testMatrix(simulation.multi_small, simulation.multi_large);
     freeSim(simulation);
-    return 0;
+    return test;
 }
 
 int main(void)
