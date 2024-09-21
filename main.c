@@ -23,9 +23,6 @@ void compressValues(MultiMatrix *matrix)
         }
 }
 
-//naive matrix multiplication algorithm
-
-
 void freeSim(SIM s) {
     freeMatrix(s.matrix_1.matrix);
     freeMatrix(s.matrix_2.matrix);
