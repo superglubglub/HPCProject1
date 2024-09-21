@@ -5,8 +5,8 @@
 #include "sparsematrix.h"
 
 FILE* initLogFile() {
-    FILE *fp = fopen("log.txt", "at+");
-    if(!fp) fp = fopen("log.txt", "wt");
+    FILE *fp = fopen("../log.txt", "at+");
+    if(!fp) fp = fopen("../log.txt", "wt");
     fprintf(fp, "\n\t// NEW TEST //\t\n");
     return fp;
 }
