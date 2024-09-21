@@ -37,7 +37,7 @@ int closeLogs(FILE *fp, STATS stats) {
 int writeOperation(FILE *fp, char* funcName, STATS* stats) {
     stats->runtime = getRuntime(stats->runtime, omp_get_wtime());
     fprintf(fp,
-        "\tPerformed %s in %.6fs\n",
+        "\tPerformed %s in %fs\n",
         funcName, stats->runtime);
     fflush(fp);
     return 0;
