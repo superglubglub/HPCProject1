@@ -24,9 +24,9 @@ typedef struct {
     int num_threads;
     int matrix_size;
     float prob;
+    double start_time;
     //not known at creation
     double runtime;
-    int memsize;
 } STATS;
 
 typedef struct {
@@ -44,6 +44,7 @@ void freeSparseMatrix(SparseRow* matrix);
 int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B);
 FILE* initLogFile();
 int writeLogs(FILE *fp, STATS stats);
+int writeOperation(FILE *fp, char* funcName, STATS stats);
 int writeFailure(FILE *fp, STATS stats);
 double getRuntime(double start, double end);
 

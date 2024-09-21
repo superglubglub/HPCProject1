@@ -36,21 +36,26 @@ void freeSim(SIM s) {
     freeMatrix(s.multi_small);
 }
 
-int simulate(float prob) {
+int simulate(float prob, STATS stats, FILE *fp) {
     SIM simulation = {
         .matrix_1 = {.matrix = createMatrix(prob)},
         .matrix_2 = {.matrix = createMatrix(prob)},
     }; printf("\tMade matrices...\n");
+    writeOperation(fp, "Matrix Creation", stats);
     simulation.multi_large = multiplyMatrix(simulation.matrix_1.matrix, simulation.matrix_2.matrix);
     printf("\tMultiplied matrices...\n");
+    writeOperation(fp, "Matrix Multiplication", stats);
 
     compressValues(&simulation.matrix_1);
     compressValues(&simulation.matrix_2);
     printf("\tCompressed matrices...\n");
+    writeOperation(fp, "Matrix Compression", stats);
     simulation.multi_small = multiplySparseMatrices(simulation.matrix_1, simulation.matrix_2);
     printf("\tMultiplied compression matrices...\n");
+    writeOperation(fp, "Compressed Matrix Multiplication", stats);
     int test = testMatrix(simulation.multi_small, simulation.multi_large);
     printf("Tested compressed matrix multiplication result...\n");
+    writeOperation(fp, "Matrix Verification", stats);
 
     freeSim(simulation);
     return test;
@@ -72,16 +77,16 @@ int main(void)
                     .num_threads = omp_get_num_threads(),
                     .matrix_size = DEFAULT_SIZE,
                     .prob = DEFAULT_PROBABILITIES[i],
+                    .start_time = omp_get_wtime(),
                 };
                 printf("Starting simulation %d of 3 with probability %.2f\n", i+1, DEFAULT_PROBABILITIES[i]);
-                int failures = simulate(DEFAULT_PROBABILITIES[i]);
+                int failures = simulate(DEFAULT_PROBABILITIES[i], stats, fp);
                 double end = omp_get_wtime();
                 if(failures > 0) {
                     stats.runtime = getRuntime(start, end);
                     printf("Matrix algorithm failed with %d errors!\n", failures);
                     writeFailure(fp, stats);
                 }
-                stats.runtime = getRuntime(start, end);
                 writeLogs(fp, stats);
                 printf("Simulation %d completed in %.2f seconds\n", i+1, stats.runtime);
                 fflush(fp);
