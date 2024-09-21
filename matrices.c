@@ -84,18 +84,52 @@ int** multiplyMatrix(int **matrix_1, int **matrix_2) {
     } printf("\t\tAllocated %lu bytes for matrix...\n", DEFAULT_SIZE * sizeof(int) * DEFAULT_SIZE);
 
     int i, j, k, tmp;
-    #pragma omp parallel for private(i,j,k) reduction(+:tmp) schedule(dynamic, 1000)
-    for (i = 0; i < DEFAULT_SIZE; i++) {
-        for (j = 0; j < DEFAULT_SIZE; j++) {
-            tmp = 0;
-            for (k = 0; k < DEFAULT_SIZE; k++) {
-                 tmp += matrix_1[i][k] * matrix_2[k][j];
-                //printf("%2d",omp_get_thread_num());
+    #pragma omp parallel
+    {
+        // Create a buffer for blocking
+        unsigned int *tmp = (unsigned int *)calloc(BLOCK_SIZE * BLOCK_SIZE, sizeof(unsigned int));
+
+        #pragma omp schedule(dynamic, 1)
+        for (i = 0; i < DEFAULT_SIZE; i += BLOCK_SIZE) {
+            for (j = 0; j < DEFAULT_SIZE; j += BLOCK_SIZE) {
+
+                // Clear temporary buffer
+                for (int x = 0; x < BLOCK_SIZE * BLOCK_SIZE; x++) {
+                    tmp[x] = 0;
+                }
+
+                for (k = 0; k < DEFAULT_SIZE; k++) {
+                    int max_i = (i + BLOCK_SIZE < DEFAULT_SIZE) ? i + BLOCK_SIZE : DEFAULT_SIZE;
+                    int max_j = (j + BLOCK_SIZE < DEFAULT_SIZE) ? j + BLOCK_SIZE : DEFAULT_SIZE;
+                    int max_k = (k + BLOCK_SIZE < DEFAULT_SIZE) ? k + BLOCK_SIZE : DEFAULT_SIZE;
+
+                    for (int ii = i; ii < max_i; ii++) {
+                        for (int jj = j; jj < max_j; jj++) {
+                            unsigned int sum = 0;
+                            for (int kk = k; kk < max_k; kk++) {
+                                sum += matrix_1[ii][kk] * matrix_2[kk][jj];
+                            }
+                            tmp[(ii-i) * BLOCK_SIZE + (jj-j)] += sum;
+                        }
+                    }
+
+                    tmp += matrix_1[i][k] * matrix_2[k][j];
+                    //printf("%2d",omp_get_thread_num());
+                }
+
+                // Update global result
+                for (int ii = 0; ii < BLOCK_SIZE && i + ii < DEFAULT_SIZE; ii++) {
+                    for (int jj = 0; jj < BLOCK_SIZE && j + jj < DEFAULT_SIZE; jj++) {
+                        result[(i+ii)][(j+jj)] = tmp[ii * BLOCK_SIZE + jj];
+                    }
+                }
+                //printf("[%d][%d]>",i,j);
             }
-            result[i][j] = tmp;
-            //printf("[%d][%d]>",i,j);
         }
+
+        free(tmp);
     }
+
 
     return result;
 }
