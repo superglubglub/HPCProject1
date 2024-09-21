@@ -40,22 +40,17 @@ int simulate(float prob) {
     SIM simulation = {
         .matrix_1 = {.matrix = createMatrix(prob)},
         .matrix_2 = {.matrix = createMatrix(prob)},
-    }; printf("Made matrices...\n");
+    }; printf("\tMade matrices...\n");
     simulation.multi_large = multiplyMatrix(simulation.matrix_1.matrix, simulation.matrix_2.matrix);
-    printf("Multiplied matrices...\n");
-
-    printf("\n\n-------- MATRIX VALUES --------\n\n");
-    printf("\n>> MATRIX 1 >>\n");           //printMatrix(simulation.matrix_1.matrix);
-    printf("\n>> MATRIX 2 >>\n");           //printMatrix(simulation.matrix_2.matrix);
-    printf("\n>> MULTIPLIED MATRIX >>\n");  //printMatrix(simulation.multi_large);
+    printf("\tMultiplied matrices...\n");
 
     compressValues(&simulation.matrix_1);
     compressValues(&simulation.matrix_2);
+    printf("\tCompressed matrices...\n");
     simulation.multi_small = multiplySparseMatrices(simulation.matrix_1, simulation.matrix_2);
-
-    printf("\n\n-------- FINAL OUTPUT VALUES --------\n\n");
-    printf("\n\n-------- MULTIPLIED COMPRESSION MATRIX --------\n\n"); //printMatrix(simulation.multi_small);
-    printf("\n\n-------- MATRIX OUTPUT TEST --------\n\n"); int test = testMatrix(simulation.multi_small, simulation.multi_large);
+    printf("\tMultiplied compression matrices...\n");
+    int test = testMatrix(simulation.multi_small, simulation.multi_large);
+    printf("Tested compressed matrix multiplication result...\n");
 
     freeSim(simulation);
     return test;

@@ -12,6 +12,7 @@ SparseRow initRow() {
 void compressRow(SparseRow* row) {
     int* tmp = realloc(row->col, sizeof(int) * row->size);
     row->col = tmp;
+    printf("\t\tCompressed row from %d down to %lu bytes...", DEFAULT_SIZE, row->size);
 }
 
 void freeSparseMatrix(SparseRow* matrix) {
@@ -44,6 +45,7 @@ int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     {
         result[i] = (int*) calloc(DEFAULT_SIZE, sizeof(int));
     }
+    printf("\t\tAllocated %lu bytes for sparse multiplication...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
 
     #pragma omp parallel for ordered schedule(dynamic)
     for(int i = 0; i < DEFAULT_SIZE; i++) {
