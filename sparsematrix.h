@@ -44,7 +44,7 @@ void freeSparseMatrix(SparseRow* sparseMatrix);
 int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B);
 FILE* initLogFile();
 int writeLogs(FILE *fp, STATS stats);
-int writeOperation(FILE *fp, char* funcName, STATS stats);
+int writeOperation(FILE *fp, char* funcName, STATS* stats);
 int writeFailure(FILE *fp, STATS stats);
 int closeLogs(FILE *fp, STATS stats);
 double getRuntime(double start, double end);
