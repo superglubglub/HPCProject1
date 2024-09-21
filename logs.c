@@ -26,7 +26,7 @@ int writeFailure(FILE *fp, STATS stats) {
 }
 
 double getRuntime(clock_t start, clock_t end) {
-    return (double) end - start;
+    return (double) end - start / CLOCKS_PER_SEC;
 }
 
 
