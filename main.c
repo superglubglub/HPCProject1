@@ -89,6 +89,7 @@ int main(void)
                 stats.runtime = getRuntime(start, end);
                 writeLogs(fp, stats);
                 printf("Simulation %d completed in %.2f seconds\n", i+1, stats.runtime);
+                fflush(fp);
             }
         }
     }
