@@ -64,7 +64,7 @@ int main(int argc, char **argv)
     int iterations = 1;
     int threadcount = NUM_THREADS;
     int opt;
-    while((opt = getopt(argc, argv, "i:t:")) != 1) {
+    while((opt = getopt(argc, argv, "i:t:")) != -1) {
         switch(opt) {
             case 'i':
                 iterations = atoi(optarg);
@@ -72,6 +72,7 @@ int main(int argc, char **argv)
             case 't':
                 threadcount = atoi(optarg);
                 break;
+            case '?':
             default: /* '?' */
                 printf("Usage: %s [-i] number of iterations [-t] max threads\n", argv[0]);
                 exit(EXIT_FAILURE);
