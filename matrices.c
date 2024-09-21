@@ -24,7 +24,7 @@ int** createMatrix(float prob)
 void printMatrix(int** matrix) {
     for (int i = 0; i < DEFAULT_SIZE; i++) {
         for (int j = 0; j < DEFAULT_SIZE; j++) {
-            printf("%2d", matrix[i][j]);
+            printf("[%2d]", matrix[i][j]);
         }
         printf("\n");
     }
@@ -60,7 +60,7 @@ int** multiplyMatrix(int **matrix_1, int **matrix_2) {
         result[i] = calloc(DEFAULT_SIZE, sizeof(int));
     } printf("Allocated %d bytes for matrix columns...\n", DEFAULT_SIZE * sizeof(int) * DEFAULT_SIZE);
 
-    #pragma omp parallel for //ordered reduction (+:result[i][j])
+    #pragma omp parallel for ordered schedule(dynamic)
     for (int i = 0; i < DEFAULT_SIZE; i++) {
         for (int j = 0; j < DEFAULT_SIZE; j++) {
             for (int k = 0; k < DEFAULT_SIZE; k++) {

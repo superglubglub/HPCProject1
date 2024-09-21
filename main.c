@@ -45,9 +45,9 @@ int simulate(float prob) {
     printf("Multiplied matrices...\n");
 
     printf("\n\n-------- MATRIX VALUES --------\n\n");
-    printf("\n>> MATRIX 1 >>\n"); //printMatrix(simulation.matrix_1.matrix);
-    printf("\n>> MATRIX 2 >>\n"); //printMatrix(simulation.matrix_2.matrix);
-    printf("\n>> MULTIPLIED MATRIX >>\n"); printMatrix(simulation.multi_large);
+    printf("\n>> MATRIX 1 >>\n");           //printMatrix(simulation.matrix_1.matrix);
+    printf("\n>> MATRIX 2 >>\n");           //printMatrix(simulation.matrix_2.matrix);
+    printf("\n>> MULTIPLIED MATRIX >>\n");  //printMatrix(simulation.multi_large);
 
     compressValues(&simulation.matrix_1);
     compressValues(&simulation.matrix_2);
