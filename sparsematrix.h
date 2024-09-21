@@ -14,7 +14,7 @@ typedef struct {
 } SparseRow;
 
 typedef struct {
-    uint8_t** matrix;
+    uint8_t* matrix;
     SparseRow* values;
     SparseRow* indexes;
 } MultiMatrix;
@@ -32,16 +32,16 @@ typedef struct {
 typedef struct {
     MultiMatrix matrix_1;
     MultiMatrix matrix_2;
-    int** multi_large;
-    int** multi_small;
+    int* multi_large;
+    int* multi_small;
 } SIM;
 
 //crow shit
 SparseRow initRow();
-void compressRow(SparseRow* row);
+void cmpRowMem(SparseRow* row);
 void addSparseValue(SparseRow valueRow, SparseRow indexRow, int nextindex, int value, int index);
 void freeSparseMatrix(SparseRow* sparseMatrix);
-int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B);
+int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B);
 FILE* initLogFile();
 int writeLogs(FILE *fp, STATS stats);
 int writeOperation(FILE *fp, char* funcName, STATS* stats);

@@ -10,7 +10,7 @@ SparseRow initRow() {
     return row;
 }
 
-void compressRow(SparseRow* row) {
+void cmpRowMem(SparseRow* row) {
     int* tmp = realloc(row->col, sizeof(int) * row->size);
     row->col = tmp;
 }
@@ -39,12 +39,8 @@ int findIndex(int index, SparseRow* indexes, SparseRow* values) {
     return 0;
 }
 
-int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
-    int** result = calloc(DEFAULT_SIZE, sizeof(int*));
-    for(int i=0; i<DEFAULT_SIZE; i++)
-    {
-        result[i] = (int*) calloc(DEFAULT_SIZE, sizeof(int));
-    }
+int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
+    int* result = malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
     printf("\t\tAllocated %lu bytes for sparse multiplication...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
 
     int i, j, k;
@@ -58,7 +54,7 @@ int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
                 SparseRow* b_values = &B.values[a_index]; SparseRow* b_indexes = &B.indexes[a_index];
                 int b_value = findIndex(j, b_indexes, b_values);
                 #pragma omp atomic
-                result[i][j] += (a_value * b_value);
+                result[i * DEFAULT_SIZE + j] += (a_value * b_value);
             }
         }
     }

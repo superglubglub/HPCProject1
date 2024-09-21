@@ -5,21 +5,21 @@
 
 void compressValues(MultiMatrix *matrix)
 {
-    matrix->values = (SparseRow*) calloc(DEFAULT_SIZE, sizeof(SparseRow));
-    matrix->indexes = (SparseRow*) calloc(DEFAULT_SIZE, sizeof(SparseRow));
+    matrix->values = (SparseRow*) malloc(DEFAULT_SIZE * sizeof(SparseRow));
+    matrix->indexes = (SparseRow*) malloc(DEFAULT_SIZE * sizeof(SparseRow));
         for (int i = 0; i < DEFAULT_SIZE; i++) {
             // create the indexes with all the space
             matrix->values[i] = initRow();
             matrix->indexes[i] = initRow();
             for (int j = 0; j < DEFAULT_SIZE; j++) {
-                if (matrix->matrix[i][j] != 0) {
+                if (matrix->matrix[i * DEFAULT_SIZE + j] != 0) {
                     matrix->indexes[i].col[matrix->indexes[i].size - 1] = j;
-                    matrix->values[i].col[matrix->values[i].size - 1] = matrix->matrix[i][j];
+                    matrix->values[i].col[matrix->values[i].size - 1] = matrix->matrix[i * DEFAULT_SIZE + j];
                     matrix->indexes[i].size++; matrix->values[i].size++;
                 }
             }
-            compressRow(&matrix->values[i]);
-            compressRow(&matrix->indexes[i]);
+            cmpRowMem(&matrix->values[i]);
+            cmpRowMem(&matrix->indexes[i]);
         }
 }
 
