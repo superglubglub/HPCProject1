@@ -85,8 +85,9 @@ int main(int argc, char **argv)
     {
       printf("Set the number of threads to %d\n",omp_get_num_threads());
     }
+    FILE *fp = initLogFile();
     for (int i = 0; i < 3; i++) {
-        FILE *fp = initLogFile();
+
         double start = omp_get_wtime();
         STATS stats = {
             .num_threads = omp_get_num_threads(),
@@ -107,6 +108,7 @@ int main(int argc, char **argv)
         closeLogs(fp, stats);
         printf("Simulation %d completed in %.2f seconds\n", i+1, stats.runtime);
     }
+    fclose(fp);
     printf("All tests passed!\n");
     exit(0);
 }

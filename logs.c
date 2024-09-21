@@ -30,7 +30,6 @@ int closeLogs(FILE *fp, STATS stats) {
         "Final Runtime: %.6fs\n",
         stats.runtime);
     fflush(fp);
-    fclose(fp);
     return 0;
 }
 
