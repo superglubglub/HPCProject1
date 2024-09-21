@@ -4,7 +4,7 @@
 //initialise the crow with calloc'd values
 SparseRow initRow() {
     SparseRow row = {
-        .col = (int*) calloc(DEFAULT_SIZE, sizeof(int)),
+        .col = (int*) malloc(DEFAULT_SIZE * sizeof(int)),
         .size = 1,
     };
     return row;
