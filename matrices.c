@@ -33,8 +33,8 @@ void printMatrix(int** matrix) {
 
 void freeMatrix(int **matrix) {
     for (int i = 0; i < DEFAULT_SIZE; i++) {
-        free(matrix[i]);
-    }
+        free(&matrix[i]);
+    } free(matrix);
 }
 
 int testMatrix(int** matrix_1, int** matrix_2) {

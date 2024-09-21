@@ -14,10 +14,10 @@ void compressRow(SparseRow* row) {
     row->col = tmp;
 }
 
-void freeSparseMatrix(SparseRow* matrix) {
+void freeSparseMatrix(SparseRow* sparseMatrix) {
     for(int i = 0; i < DEFAULT_SIZE; i++) {
-        free(matrix[i].col);
-    }
+        free(sparseMatrix[i].col);
+    } free(sparseMatrix);
 }
 
 int findIndex(int index, SparseRow* indexes, SparseRow* values) {

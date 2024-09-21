@@ -40,7 +40,7 @@ typedef struct {
 SparseRow initRow();
 void compressRow(SparseRow* row);
 void addSparseValue(SparseRow valueRow, SparseRow indexRow, int nextindex, int value, int index);
-void freeSparseMatrix(SparseRow* matrix);
+void freeSparseMatrix(SparseRow* sparseMatrix);
 int** multiplySparseMatrices(MultiMatrix A, MultiMatrix B);
 FILE* initLogFile();
 int writeLogs(FILE *fp, STATS stats);
