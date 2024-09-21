@@ -64,15 +64,15 @@ int** multiplyMatrix(int **matrix_1, int **matrix_2) {
         result[i] = calloc(DEFAULT_SIZE, sizeof(int));
     } printf("\t\tAllocated %lu bytes for matrix...\n", DEFAULT_SIZE * sizeof(int) * DEFAULT_SIZE);
 
-
+    #pragma omp parallel for private(tmp, i, j, k)
     for (int i = 0; i < DEFAULT_SIZE; i++) {
         for (int j = 0; j < DEFAULT_SIZE; j++) {
-            #pragma omp parallel for schedule(dynamic)
+            tmp = 0;
             for (int k = 0; k < DEFAULT_SIZE; k++) {
-                #pragma omp critical
-                result[i][j] += matrix_1[i][k] * matrix_2[k][j];
+                tmp += matrix_1[i][k] * matrix_2[k][j];
                 printf("%2d",omp_get_thread_num());
             }
+            result[i][j] = tmp;
             printf("[%d][%d]>",i,j);
         }
     } printf("\n");
