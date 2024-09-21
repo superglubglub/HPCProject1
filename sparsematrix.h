@@ -9,7 +9,7 @@
 #include "vars.h"
 
 typedef struct {
-    uint8_t* col;
+    int* col;
     size_t size;
 } SparseRow;
 

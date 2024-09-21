@@ -3,14 +3,14 @@
 //initialise the crow with calloc'd values
 SparseRow initRow() {
     SparseRow row = {
-        .col = (uint8_t*) calloc(DEFAULT_SIZE, sizeof(uint8_t)),
+        .col = (int*) calloc(DEFAULT_SIZE, sizeof(int)),
         .size = 1,
     };
     return row;
 }
 
 void compressRow(SparseRow* row) {
-    uint8_t* tmp = realloc(&row->col, sizeof(uint8_t) * row->size);
+    int* tmp = realloc(&row->col, sizeof(int) * row->size);
     row->col = tmp;
 }
 
