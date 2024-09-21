@@ -13,13 +13,13 @@ int** createMatrix(float prob)
         matrix[i] = (int*) calloc(DEFAULT_SIZE, sizeof(int));
     } printf("\t\tAllocated %lu bytes for new matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
 
-    #pragma omp parallel for schedule(dynamic, 1000)
-    for (int i = 0; i < DEFAULT_SIZE; i++)
+    int i, j;
+    #pragma omp parallel for private(i, j) schedule(dynamic, 1000)
+    for (i = 0; i < DEFAULT_SIZE; i++)
     {
-        for (int j = 0; j < DEFAULT_SIZE; j++)
+        for (j = 0; j < DEFAULT_SIZE; j++)
         {
             if( rand() % RAND_RANGE < (int) RAND_RANGE * prob) {
-                #pragma omp atomic
                 matrix[i][j] = rand() % LIMIT;
             }
         }
