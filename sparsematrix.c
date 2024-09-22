@@ -11,8 +11,8 @@ SparseRow initRow() {
 }
 
 void cmpContigSparse(SparseMatrix sparseMatrix) {
-    uint8_t *tmp_val = realloc(sparseMatrix.val, sizeof(int) * sparseMatrix.offset[DEFAULT_SIZE]);
-    int *tmp_idx = realloc(sparseMatrix.idx, sizeof(int) * sparseMatrix.offset[DEFAULT_SIZE]);
+    uint8_t *tmp_val = realloc(sparseMatrix.val, sizeof(uint8_t) * sparseMatrix.offset[DEFAULT_SIZE - 1]);
+    int *tmp_idx = realloc(sparseMatrix.idx, sizeof(int) * sparseMatrix.offset[DEFAULT_SIZE - 1]);
     sparseMatrix.val = tmp_val;
     sparseMatrix.idx = tmp_idx;
 }
