@@ -39,60 +39,25 @@ int findIndex(int index, SparseRow* indexes, SparseRow* values) {
     return 0;
 }
 
-//get the transpose of the sparse matrix as a single sparse row
-uint8_t* transposeSparseMatrix(SparseRow* sparseValues, SparseRow* sparseIndexes, uint8_t* transpose) {
-
-    // init all rows in the transpose matrix
-    int i, j;
-    for(i = 0; i < DEFAULT_SIZE; i++) {
-        for(j = 0; j < sparseIndexes[i].size; j++) {
-            transpose[sparseIndexes[i].col[j] * DEFAULT_SIZE + i] = sparseValues[i].col[j];
-        }
-    }
-    return transpose;
-}
-
 int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     int* result = malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
     printf("\t\tAllocated %lu bytes for sparse multiplication...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
 
-    uint8_t* transpose = calloc(DEFAULT_SIZE * DEFAULT_SIZE, sizeof(uint8_t));
-    printf("\t\tAllocated %lu bytes for tranposed sparse matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
-    transposeSparseMatrix(B.values, B.indexes, transpose);
-
-    for (int i = 0; i < DEFAULT_SIZE; i++)
-    {
-        for (int j = 0; j < DEFAULT_SIZE; j++)
-        {
-            int tmp = 0;
-            #pragma omp parallel for reduction(+:tmp) schedule(dynamic)
-            for(int k = 0; k < A.values[i].size; k++)
-            {
-                int a_index = A.indexes[i].col[k]; int a_value = A.values[i].col[k];
-                tmp += a_value * (int) transpose[j * DEFAULT_SIZE + a_index];
-            }
-            result[i * DEFAULT_SIZE + j] = tmp;
-        }
-    }
-
-    /*int i, j, k;
     #pragma omp parallel for private(i, j, k) schedule(static, BLOCK_SIZE)
-    for(i = 0; i < DEFAULT_SIZE; i++) {
+    for(int i = 0; i < DEFAULT_SIZE; i++) {
         SparseRow* a_values = &A.values[i];
         SparseRow* a_indexes = &A.indexes[i];
-        for(j = 0; j < DEFAULT_SIZE; j++){
-            for(k = 0; k < a_values->size; k++) {
+        for(int j = 0; j < DEFAULT_SIZE; j++){
+            for(int k = 0; k < a_values->size; k++) {
                 int a_index = a_indexes->col[k]; int a_value = a_values->col[k];
-                int b_value = transpose[j * DEFAULT_SIZE + a_index];
-                //SparseRow* b_values = &B.values[a_index]; SparseRow* b_indexes = &B.indexes[a_index];
-                //int b_value = findIndex(j, b_indexes, b_values);
+                SparseRow* b_values = &B.values[a_index]; SparseRow* b_indexes = &B.indexes[a_index];
+                int b_value = findIndex(j, b_indexes, b_values);
                 #pragma omp atomic
                 result[i * DEFAULT_SIZE + j] += (a_value * b_value);
             }
         }
-    }*/
+    }
 
-    free(transpose);
     return result;
 }
 
