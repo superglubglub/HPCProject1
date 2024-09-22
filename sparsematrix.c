@@ -40,10 +40,10 @@ int findIndex(int index, SparseRow* indexes, SparseRow* values) {
 }
 
 //get the transpose of the sparse matrix as a single sparse row
-int* transposeSparseMatrix(SparseRow* sparseValues, SparseRow* sparseIndexes) {
+uint8_t* transposeSparseMatrix(SparseRow* sparseValues, SparseRow* sparseIndexes) {
 
     // init all rows in the transpose matrix
-    int* transpose = calloc(DEFAULT_SIZE * DEFAULT_SIZE, sizeof(int));
+    uint8_t* transpose = calloc(DEFAULT_SIZE * DEFAULT_SIZE, sizeof(uint8_t));
     for(int i = 0; i < DEFAULT_SIZE; i++) {
         SparseRow row = sparseIndexes[i];
         for(int j = 0; j < row.size; j++) {
@@ -51,7 +51,7 @@ int* transposeSparseMatrix(SparseRow* sparseValues, SparseRow* sparseIndexes) {
             transpose[index * DEFAULT_SIZE + i] = sparseValues[i].col[j];
         }
     }
-    printf("\t\tAllocated %lu bytes for tranposed sparse matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
+    printf("\t\tAllocated %lu bytes for tranposed sparse matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
     return transpose;
 }
 
@@ -59,19 +59,18 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     int* result = malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
     printf("\t\tAllocated %lu bytes for sparse multiplication...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
 
-    int* transpose = transposeSparseMatrix(B.values, B.indexes);
+    uint8_t* transpose = transposeSparseMatrix(B.values, B.indexes);
 
-    int i, j, k, tmp;
-    #pragma omp parallel for private(i, j, k) schedule(static, BLOCK_SIZE) reduction(+:tmp) //schedule(dynamic, 1)
-    for (i = 0; i < DEFAULT_SIZE; i++)
+    int tmp;
+    #pragma omp parallel for schedule(static, BLOCK_SIZE) collapse(2) reduction(+:tmp)
+    for (int i = 0; i < DEFAULT_SIZE; i++)
     {
-        for (j = 0; j < DEFAULT_SIZE; j++)
+        for (int j = 0; j < DEFAULT_SIZE; j++)
         {
             tmp = 0;
-            for(k = 0; k < A.indexes[i].size; k++)
+            for(int k = 0; k < A.indexes[i].size; k++)
             {
-                #pragma omp atomic
-                tmp += A.values[i].col[k] * transpose[A.indexes[i].col[k] + j * DEFAULT_SIZE];
+                tmp += A.values[i].col[k] * transpose[j * DEFAULT_SIZE + A.indexes[i].col[k]];
             }
             result[i * DEFAULT_SIZE + j] = tmp;
         }
