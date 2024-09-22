@@ -61,16 +61,6 @@ void freeMatrix(int *matrix) {
     free(matrix);
 }
 
-void transposeMatrix(uint8_t* matrix, uint8_t* transpose) {
-    int i, j;
-    for(i = 0; i < DEFAULT_SIZE; i++) {
-        for(j = 0; j < DEFAULT_SIZE; j++) {
-            transpose[j * DEFAULT_SIZE + i] = matrix[i * DEFAULT_SIZE + j];
-        }
-    }
-    return;
-}
-
 int testMatrix(int* matrix_1, int* matrix_2) {
     int failures = 0;
     #pragma omp parallel for
@@ -85,6 +75,16 @@ int testMatrix(int* matrix_1, int* matrix_2) {
         } //printf("\n");
     }
     return failures;
+}
+
+void transposeMatrix(uint8_t* matrix, uint8_t* transpose) {
+    int i, j;
+    for(i = 0; i < DEFAULT_SIZE; i++) {
+        for(j = 0; j < DEFAULT_SIZE; j++) {
+            transpose[j * DEFAULT_SIZE + i] = matrix[i * DEFAULT_SIZE + j];
+        }
+    }
+    return;
 }
 
 int* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
