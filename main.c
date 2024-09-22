@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     size = DEFAULT_SIZE;
     int threadcount = NUM_THREADS;
     int opt;
-    while((opt = getopt(argc, argv, "i:t:")) != -1) {
+    while((opt = getopt(argc, argv, "s:t:")) != -1) {
         switch(opt) {
             case 's':
                 size = atoi(optarg);
