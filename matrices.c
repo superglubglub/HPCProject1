@@ -83,7 +83,7 @@ int* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
     printf("\t\tAllocated %lu bytes for matrix...\n", DEFAULT_SIZE * sizeof(int) * DEFAULT_SIZE);
 
     int i, j, k, tmp, blksize;
-    #pragma omp parallel default(shared
+    #pragma omp parallel default(shared)
     {
         #pragma omp single
         {
