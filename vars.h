@@ -3,4 +3,4 @@
 #define NUM_THREADS 128
 #define LIMIT 10
 #define RAND_RANGE 100
-#define BLOCK_SIZE 64
+#define BLOCK_SIZE 50

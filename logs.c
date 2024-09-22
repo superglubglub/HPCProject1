@@ -15,13 +15,13 @@ struct tm* get_time(){
 FILE* initLogFile() {
     FILE *fp = fopen("../logging.txt", "at+");
     if(!fp) fp = fopen("../log.txt", "wt");
-    fprintf(fp, "\n\t$$NEWTEST$$\t - %s\t\n",asctime(get_time()));
+    fprintf(fp, "\t%s\t\n",asctime(get_time()));
     return fp;
 }
 
 int writeLogs(FILE *fp, STATS stats) {
     fprintf(fp,
-        "\n$SIZE:$%d\t$PROB:$%.2f\t$THREADS:$%d\n",
+        "$SIZE:$%d\t$PROB:$%.2f\t$THREADS:$%d\n",
         stats.matrix_size, stats.prob, stats.num_threads);
     return 0;
 }
