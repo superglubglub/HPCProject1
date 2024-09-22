@@ -19,7 +19,7 @@ uint32_t xorshift32(uint32_t *state) {
 
 uint8_t* createMatrix(float prob)
 {
-    uint8_t* matrix = malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
+    uint8_t* matrix = (uint8_t*) malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
     printf("\t\tAllocated %lu bytes for new matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
 
     const uint32_t threshold = (uint32_t)(prob * UINT_MAX);
@@ -89,11 +89,11 @@ void transposeMatrix(uint8_t* matrix, uint8_t* transpose) {
 
 int* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
     printf("\t\tAttempting to multiply matrices...\n");
-    int* result = malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
+    int* result = (int*) malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
     printf("\t\tAllocated %lu bytes for matrix...\n", DEFAULT_SIZE * sizeof(int) * DEFAULT_SIZE);
 
     //get the transpose of matrix_2
-    uint8_t* transpose = malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
+    uint8_t* transpose = (uint8_t*) malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
     printf("\t\tAllocated %lu bytes for new transpose matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
     transposeMatrix(matrix_2, transpose);
 
