@@ -67,15 +67,15 @@ int main(int argc, char **argv)
     int opt;
     while((opt = getopt(argc, argv, "i:t:")) != -1) {
         switch(opt) {
-            case 'I':
+            case 'i':
                 iterations = atoi(optarg);
                 break;
-            case 'T':
+            case 't':
                 threadcount = atoi(optarg);
                 break;
             case '?':
             default: /* '?' */
-                printf("Usage: %s [-I] number of iterations [-T] max threads\n", argv[0]);
+                printf("Usage: %s [-i] number of iterations [-t] max threads\n", argv[0]);
                 exit(EXIT_FAILURE);
         }
     }
