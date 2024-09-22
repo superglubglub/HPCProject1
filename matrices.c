@@ -83,10 +83,7 @@ int* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
     printf("\t\tAllocated %lu bytes for matrix...\n", DEFAULT_SIZE * sizeof(int) * DEFAULT_SIZE);
 
     int i, j, k, tmp;
-    #pragma omp parallel for            \
-        default(shared) private(i,j,k)  \
-        schedule(static, BLOCK_SIZE)    \
-        reduction(+:tmp)                \
+    #pragma omp parallel for default(shared) private(i,j,k) schedule(static, BLOCK_SIZE) reduction(+:tmp)
     for (i = 0; i < DEFAULT_SIZE; i++) {
         for (j = 0; j < DEFAULT_SIZE; j++) {
             tmp = 0;
