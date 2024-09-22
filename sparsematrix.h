@@ -49,7 +49,8 @@ int writeFailure(FILE *fp, STATS stats);
 int closeLogs(FILE *fp, STATS stats);
 double getRuntime(double start, double end);
 
-//sizing
+//externs
 extern int size;
+extern char* logfile;
 
 #endif //CMATRIX_H

@@ -4,6 +4,7 @@
 #include <omp.h>
 
 int size;
+char* logfile;
 
 void compressValues(MultiMatrix *matrix)
 {
@@ -65,6 +66,7 @@ int simulate(float prob, STATS* stats, FILE *fp) {
 int main(int argc, char **argv)
 {
     size = DEFAULT_SIZE;
+    logfile = "logging.txt";
     int threadcount = NUM_THREADS;
     int opt;
     while((opt = getopt(argc, argv, "s:t:")) != -1) {
@@ -75,9 +77,12 @@ int main(int argc, char **argv)
             case 't':
                 threadcount = atoi(optarg);
                 break;
+            case 'l':
+                logfile = optarg;
+                break;
             case '?':
             default: /* '?' */
-                printf("Usage: %s [-i] number of iterations [-t] max threads\n", argv[0]);
+                printf("Usage: %s [-i] number of iterations [-t] max threads [-l] logging path\n", argv[0]);
                 exit(EXIT_FAILURE);
         }
     }
