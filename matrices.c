@@ -99,7 +99,7 @@ uint32_t* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
     int tmp;
     #pragma omp parallel
     {
-        #pragma omp for reduction(+:tmp) schedule(static, BLOCK_SIZE)
+        #pragma omp for reduction(+:tmp) //schedule(static, BLOCK_SIZE)
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
