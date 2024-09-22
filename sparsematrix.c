@@ -60,14 +60,14 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
 
     uint8_t* transpose = transposeSparseMatrix(B.values, B.indexes);
 
-    int tmp;
-    #pragma omp parallel for schedule(dynamic, 1) reduction(+:tmp)
+    int k, tmp;
+    #pragma omp parallel for private(k) schedule(dynamic, 1) reduction(+:tmp)
     for (int i = 0; i < DEFAULT_SIZE; i++)
     {
         for (int j = 0; j < DEFAULT_SIZE; j++)
         {
             tmp = 0;
-            for(int k = 0; k < A.indexes[i].size; k++)
+            for(k = 0; k < A.indexes[i].size; k++)
             {
                 tmp += (A.indexes[i].col[k] * transpose[j * DEFAULT_SIZE + A.indexes[i].col[k]]);
             }
