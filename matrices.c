@@ -87,14 +87,14 @@ void transposeMatrix(uint8_t* matrix, uint8_t* transpose) {
     return;
 }
 
-int* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
+uint32_t* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
     printf("\t\tAttempting to multiply matrices...\n");
-    int* result = (int*) malloc((long) DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
+    uint32_t* result = (uint32_t*) malloc((long)(DEFAULT_SIZE * DEFAULT_SIZE) * sizeof(int));
     printf("\t\tAllocated %lu bytes for matrix...\n", DEFAULT_SIZE * sizeof(int) * DEFAULT_SIZE);
 
     //get the transpose of matrix_2
-    uint8_t* transpose = (uint8_t*) malloc((long) DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
-    printf("\t\tAllocated %lu bytes for new transpose matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
+    uint8_t* transpose = (uint8_t*) malloc((long)(DEFAULT_SIZE * DEFAULT_SIZE) * sizeof(uint8_t));
+    printf("\t\tAllocated %lu bytes for new transpose matrix...\n",(long)(DEFAULT_SIZE * DEFAULT_SIZE) * sizeof(uint8_t));
     transposeMatrix(matrix_2, transpose);
 
     int tmp;
