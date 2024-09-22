@@ -73,7 +73,6 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
                 int a_index = A.indexes[i].col[k]; int a_value = A.values[i].col[k];
                 tmp += a_value * (int) transpose[j * DEFAULT_SIZE + a_index];
             }
-            #pragma omp atomic
             result[i * DEFAULT_SIZE + j] = tmp;
         }
     }
