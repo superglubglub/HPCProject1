@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <omp.h>
 
+int size;
+
 void compressValues(MultiMatrix *matrix)
 {
     matrix->values = (SparseRow*) malloc(size * sizeof(SparseRow));
