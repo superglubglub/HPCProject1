@@ -45,7 +45,7 @@ typedef struct {
 //crow shit
 SparseRow initRow();
 void cmpRowMem(SparseRow* row);
-void cmpContigSparse(SparseMatrix* matrix);
+void cmpContigSparse(SparseMatrix sparseMatrix);
 void addSparseValue(SparseRow valueRow, SparseRow indexRow, int nextindex, int value, int index);
 //void freeSparseMatrix(SparseRow* sparseMatrix);
 void freeSparseMatrix(SparseMatrix* sparseMatrix);

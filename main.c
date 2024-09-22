@@ -45,7 +45,7 @@ void compressValues(MultiMatrix *matrix)
                 matrix->sparse.offset[i]++;
             }
         }
-        cmpContigSparse(&matrix->sparse);
+        cmpContigSparse(matrix->sparse);
     }
 }
 
