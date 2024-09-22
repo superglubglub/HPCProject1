@@ -45,7 +45,7 @@ uint8_t* transposeSparseMatrix(SparseRow* sparseValues, SparseRow* sparseIndexes
     // init all rows in the transpose matrix
     uint8_t* transpose = calloc(DEFAULT_SIZE * DEFAULT_SIZE, sizeof(uint8_t));
     for(int i = 0; i < DEFAULT_SIZE; i++) {
-        for(int j = 0; j < sparseIndexes[j].size; j++) {
+        for(int j = 0; j < sparseIndexes[i].size; j++) {
             int row = sparseIndexes[i].col[j];
             transpose[row * DEFAULT_SIZE + i] = sparseValues[i].col[j];
         }
