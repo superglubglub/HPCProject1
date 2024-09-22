@@ -82,19 +82,31 @@ int* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
     int* result = malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
     printf("\t\tAllocated %lu bytes for matrix...\n", DEFAULT_SIZE * sizeof(int) * DEFAULT_SIZE);
 
-    int i, j, k, tmp;
-    #pragma omp parallel for default(shared) private(i,j,k) schedule(static, BLOCK_SIZE) reduction(+:tmp)
-    for (i = 0; i < DEFAULT_SIZE; i++) {
-        for (j = 0; j < DEFAULT_SIZE; j++) {
-            tmp = 0;
-            for (k = 0; k < DEFAULT_SIZE; k++) {
-                 tmp += matrix_1[i * DEFAULT_SIZE + k] * matrix_2[k * DEFAULT_SIZE + j];
-                //printf("%2d",omp_get_thread_num());
+    int i, j, k, tmp, blksize;
+    #pragma omp parallel
+    {
+        #pragma omp single
+        {
+            int num_threads = omp_get_num_threads();
+            blksize = (num_threads + 1) / DEFAULT_SIZE;
+        }
+        #pragma omp for default(shared) private(i,j,k) schedule(static, blksize) reduction(+:tmp)
+        for (i = 0; i < DEFAULT_SIZE; i++)
+        {
+            for (j = 0; j < DEFAULT_SIZE; j++)
+            {
+                tmp = 0;
+                for (k = 0; k < DEFAULT_SIZE; k++)
+                {
+                    tmp += matrix_1[i * DEFAULT_SIZE + k] * matrix_2[k * DEFAULT_SIZE + j];
+                    //printf("%2d",omp_get_thread_num());
+                }
+                result[i * DEFAULT_SIZE + j] = tmp;
+                //printf("[%d][%d]>",i,j);
             }
-            result[i * DEFAULT_SIZE + j] = tmp;
-            //printf("[%d][%d]>",i,j);
         }
     }
+
 
     return result;
 }
