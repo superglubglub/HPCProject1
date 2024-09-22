@@ -62,7 +62,7 @@ void freeMatrix(int *matrix) {
 
 int testMatrix(int* matrix_1, int* matrix_2) {
     int failures = 0;
-    #pragma omp parallel for
+    #pragma omp parallel for schedule(static, BLOCK_SIZE)
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             if (matrix_1[i * size + j] != matrix_2[i * size + j]) {
