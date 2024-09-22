@@ -4,19 +4,19 @@
 //initialise the crow with calloc'd values
 SparseRow initRow() {
     SparseRow row = {
-        .col = (uint32_t*) calloc(DEFAULT_SIZE, sizeof(int)),
+        .col = (int*) malloc(size * sizeof(int)),
         .size = 1,
     };
     return row;
 }
 
 void cmpRowMem(SparseRow* row) {
-    uint32_t* tmp = realloc(row->col, sizeof(uint32_t) * row->size);
+    int* tmp = realloc(row->col, sizeof(int) * row->size);
     row->col = tmp;
 }
 
 void freeSparseMatrix(SparseRow* sparseMatrix) {
-    for(int i = 0; i < DEFAULT_SIZE; i++) {
+    for(int i = 0; i < size; i++) {
         free(sparseMatrix[i].col);
     } free(sparseMatrix);
 }
@@ -40,13 +40,13 @@ int findIndex(int index, SparseRow* indexes, SparseRow* values) {
 }
 
 uint32_t* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
-    uint32_t* result = (uint32_t*) malloc((long) DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
-    printf("\t\tAllocated %lu bytes for sparse multiplication...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
+    uint32_t* result = (uint32_t*) malloc((long) size * size * sizeof(int));
+    printf("\t\tAllocated %lu bytes for sparse multiplication...\n", size * size * sizeof(int));
 
     int tmp;
     #pragma omp parallel for collapse(2) schedule(static, BLOCK_SIZE)
-    for(int i = 0; i < DEFAULT_SIZE; i++) {
-        for(int j = 0; j < DEFAULT_SIZE; j++){
+    for(int i = 0; i < size; i++) {
+        for(int j = 0; j < size; j++){
             tmp = 0;
             for(int k = 0; k < A.values[i].size; k++) {
                 int a_index = A.indexes[i].col[k]; int a_value = A.values[i].col[k];
@@ -54,7 +54,7 @@ uint32_t* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
                 int b_value = findIndex(j, b_indexes, b_values);
                 tmp += (a_value * b_value);
             }
-            result[i * DEFAULT_SIZE + j] = tmp;
+            result[i * size + j] = tmp;
         }
     }
 

@@ -5,17 +5,17 @@
 
 void compressValues(MultiMatrix *matrix)
 {
-    matrix->values = (SparseRow*) malloc(DEFAULT_SIZE * sizeof(SparseRow));
-    matrix->indexes = (SparseRow*) malloc( DEFAULT_SIZE * sizeof(SparseRow));
-    for (int i = 0; i < DEFAULT_SIZE; i++) {
+    matrix->values = (SparseRow*) malloc(size * sizeof(SparseRow));
+    matrix->indexes = (SparseRow*) malloc( size * sizeof(SparseRow));
+    for (int i = 0; i < size; i++) {
         // create the indexes with all the space
         matrix->values[i] = initRow();
         matrix->indexes[i] = initRow();
         #pragma omp parallel for
-        for (int j = 0; j < DEFAULT_SIZE; j++) {
-            if (matrix->matrix[i * DEFAULT_SIZE + j] != 0) {
+        for (int j = 0; j < size; j++) {
+            if (matrix->matrix[i * size + j] != 0) {
                 matrix->indexes[i].col[matrix->indexes[i].size - 1] = j;
-                matrix->values[i].col[matrix->values[i].size - 1] = matrix->matrix[i * DEFAULT_SIZE + j];
+                matrix->values[i].col[matrix->values[i].size - 1] = matrix->matrix[i * size + j];
                 matrix->indexes[i].size++; matrix->values[i].size++;
             }
         }
@@ -62,13 +62,13 @@ int simulate(float prob, STATS* stats, FILE *fp) {
 
 int main(int argc, char **argv)
 {
-    int iterations = 1;
+    size = DEFAULT_SIZE;
     int threadcount = NUM_THREADS;
     int opt;
     while((opt = getopt(argc, argv, "i:t:")) != -1) {
         switch(opt) {
-            case 'i':
-                iterations = atoi(optarg);
+            case 's':
+                size = atoi(optarg);
                 break;
             case 't':
                 threadcount = atoi(optarg);
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
         double start = omp_get_wtime();
         STATS stats = {
             .num_threads = threadcount,
-            .matrix_size = DEFAULT_SIZE,
+            .matrix_size = size,
             .prob = DEFAULT_PROBABILITIES[i],
             .start_time = omp_get_wtime(),
             .runtime = 0,

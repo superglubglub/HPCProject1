@@ -19,8 +19,8 @@ uint32_t xorshift32(uint32_t *state) {
 
 uint8_t* createMatrix(float prob)
 {
-    uint8_t* matrix = (uint8_t*) malloc((long) DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
-    printf("\t\tAllocated %lu bytes for new matrix...\n", (long) DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
+    uint8_t* matrix = (uint8_t*) malloc((long) size * size * sizeof(uint8_t));
+    printf("\t\tAllocated %lu bytes for new matrix...\n", (long) size * size * sizeof(uint8_t));
 
     const uint32_t threshold = (uint32_t)(prob * UINT_MAX);
 
@@ -28,12 +28,12 @@ uint8_t* createMatrix(float prob)
     {
         uint32_t seed = time(NULL) ^ omp_get_thread_num();
         #pragma omp parallel for collapse(2) schedule(static, BLOCK_SIZE)
-        for (int i = 0; i < DEFAULT_SIZE; i++){
-            for (int j = 0; j < DEFAULT_SIZE; j++){
+        for (int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
                 if(xorshift32(&seed) < threshold) {
-                    matrix[i * DEFAULT_SIZE + j] = (xorshift32(&seed) % 9) + 1;
+                    matrix[i * size + j] = (xorshift32(&seed) % 9) + 1;
                 } else {
-                    matrix[i * DEFAULT_SIZE + j] = 0;
+                    matrix[i * size + j] = 0;
                 }
             }
         }
@@ -43,9 +43,9 @@ uint8_t* createMatrix(float prob)
 }
 
 void printMatrix(int* matrix) {
-    for (int i = 0; i < DEFAULT_SIZE; i++) {
-        for (int j = 0; j < DEFAULT_SIZE; j++) {
-            printf("[%2d]", matrix[i * DEFAULT_SIZE + j]);
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            printf("[%2d]", matrix[i * size + j]);
         }
         printf("\n");
     }
@@ -63,9 +63,9 @@ void freeMatrix(int *matrix) {
 int testMatrix(int* matrix_1, int* matrix_2) {
     int failures = 0;
     #pragma omp parallel for
-    for (int i = 0; i < DEFAULT_SIZE; i++) {
-        for (int j = 0; j < DEFAULT_SIZE; j++) {
-            if (matrix_1[i * DEFAULT_SIZE + j] != matrix_2[i * DEFAULT_SIZE + j]) {
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (matrix_1[i * size + j] != matrix_2[i * size + j]) {
                 //printf("[%d != %d] FAIL\t", matrix_1[i][j], matrix_2[i][j]);
                 failures += 1;
             } else {
@@ -78,9 +78,9 @@ int testMatrix(int* matrix_1, int* matrix_2) {
 
 void transposeMatrix(uint8_t* matrix, uint8_t* transpose) {
     int i, j;
-    for(i = 0; i < DEFAULT_SIZE; i++) {
-        for(j = 0; j < DEFAULT_SIZE; j++) {
-            transpose[j * DEFAULT_SIZE + i] = matrix[i * DEFAULT_SIZE + j];
+    for(i = 0; i < size; i++) {
+        for(j = 0; j < size; j++) {
+            transpose[j * size + i] = matrix[i * size + j];
         }
     }
     return;
@@ -88,29 +88,29 @@ void transposeMatrix(uint8_t* matrix, uint8_t* transpose) {
 
 uint32_t* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
     printf("\t\tAttempting to multiply matrices...\n");
-    uint32_t* result = (uint32_t*) malloc((long)(DEFAULT_SIZE * DEFAULT_SIZE) * sizeof(int));
-    printf("\t\tAllocated %lu bytes for matrix...\n", DEFAULT_SIZE * sizeof(int) * DEFAULT_SIZE);
+    uint32_t* result = (uint32_t*) malloc((long)(size * size) * sizeof(int));
+    printf("\t\tAllocated %lu bytes for matrix...\n", size * sizeof(int) * size);
 
     //get the transpose of matrix_2
-    uint8_t* transpose = (uint8_t*) malloc((long)(DEFAULT_SIZE * DEFAULT_SIZE) * sizeof(uint8_t));
-    printf("\t\tAllocated %lu bytes for new transpose matrix...\n",(long)(DEFAULT_SIZE * DEFAULT_SIZE) * sizeof(uint8_t));
+    uint8_t* transpose = (uint8_t*) malloc((long)(size * size) * sizeof(uint8_t));
+    printf("\t\tAllocated %lu bytes for new transpose matrix...\n",(long)(size * size) * sizeof(uint8_t));
     transposeMatrix(matrix_2, transpose);
 
     int tmp;
     #pragma omp parallel
     {
         #pragma omp for reduction(+:tmp) collapse(2) schedule(static, BLOCK_SIZE)
-        for (int i = 0; i < DEFAULT_SIZE; i++)
+        for (int i = 0; i < size; i++)
         {
-            for (int j = 0; j < DEFAULT_SIZE; j++)
+            for (int j = 0; j < size; j++)
             {
                 tmp = 0;
-                for (int k = 0; k < DEFAULT_SIZE; k++)
+                for (int k = 0; k < size; k++)
                 {
-                    tmp += matrix_1[i * DEFAULT_SIZE + k] * transpose[k + j * DEFAULT_SIZE];
+                    tmp += matrix_1[i * size + k] * transpose[k + j * size];
                     //printf("%2d",omp_get_thread_num());
                 }
-                result[i * DEFAULT_SIZE + j] = tmp;
+                result[i * size + j] = tmp;
                 //printf("[%d][%d]>",i,j);
             }
         }
