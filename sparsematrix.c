@@ -61,7 +61,7 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
 
     uint8_t* transpose = transposeSparseMatrix(B.values, B.indexes);
 
-    int tmp;
+    /* int tmp;
     #pragma omp parallel for shared(result) schedule(dynamic, 1)
     for (int i = 0; i < DEFAULT_SIZE; i++)
     {
@@ -75,10 +75,8 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
             }
             result[i * DEFAULT_SIZE + j] = tmp;
         }
-    }
-    free(transpose);
+    }*/
 
-    /*
     int i, j, k;
     #pragma omp parallel for private(i, j, k) schedule(static, BLOCK_SIZE)
     for(i = 0; i < DEFAULT_SIZE; i++) {
@@ -87,14 +85,16 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
         for(j = 0; j < DEFAULT_SIZE; j++){
             for(k = 0; k < a_values->size; k++) {
                 int a_index = a_indexes->col[k]; int a_value = a_values->col[k];
-                SparseRow* b_values = &B.values[a_index]; SparseRow* b_indexes = &B.indexes[a_index];
-                int b_value = findIndex(j, b_indexes, b_values);
+                int b_value = transpose[j * DEFAULT_SIZE + a_index];
+                //SparseRow* b_values = &B.values[a_index]; SparseRow* b_indexes = &B.indexes[a_index];
+                //int b_value = findIndex(j, b_indexes, b_values);
                 #pragma omp atomic
                 result[i * DEFAULT_SIZE + j] += (a_value * b_value);
             }
         }
-    }*/
+    }
 
+    free(transpose);
     return result;
 }
 
