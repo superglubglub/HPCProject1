@@ -10,11 +10,11 @@ SparseRow initRow() {
     return row;
 }
 
-void cmpContigSparse(SparseMatrix sparseMatrix) {
-    uint8_t *tmp_val = realloc(sparseMatrix.val, sizeof(uint8_t) * sparseMatrix.offset[DEFAULT_SIZE - 1]);
-    int *tmp_idx = realloc(sparseMatrix.idx, sizeof(int) * sparseMatrix.offset[DEFAULT_SIZE - 1]);
-    sparseMatrix.val = tmp_val;
-    sparseMatrix.idx = tmp_idx;
+void cmpContigSparse(SparseMatrix* sparseMatrix) {
+    uint8_t *tmp_val = realloc(sparseMatrix->val, sizeof(uint8_t) * sparseMatrix.offset[DEFAULT_SIZE - 1]);
+    int *tmp_idx = realloc(sparseMatrix->idx, sizeof(int) * sparseMatrix.offset[DEFAULT_SIZE - 1]);
+    sparseMatrix->val = tmp_val;
+    sparseMatrix->idx = tmp_idx;
 }
 
 void cmpRowMem(SparseRow* row) {
