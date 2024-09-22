@@ -50,6 +50,6 @@ int closeLogs(FILE *fp, STATS stats);
 double getRuntime(double start, double end);
 
 //sizing
-extern int size = DEFAULT_SIZE;
+extern int size;
 
 #endif //CMATRIX_H
