@@ -88,8 +88,8 @@ void transposeMatrix(uint8_t* matrix, uint8_t* transpose) {
 
 uint32_t* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
     printf("\t\tAttempting to multiply matrices...\n");
-    uint32_t* result = (uint32_t*) malloc((long)(size * size) * sizeof(int));
-    printf("\t\tAllocated %lu bytes for matrix...\n", size * sizeof(int) * size);
+    uint32_t* result = (uint32_t*) malloc((long)(size * size) * sizeof(uint32_t));
+    printf("\t\tAllocated %lu bytes for matrix...\n", size * sizeof(uint32_t) * size);
 
     //get the transpose of matrix_2
     uint8_t* transpose = (uint8_t*) malloc((long)(size * size) * sizeof(uint8_t));
@@ -99,7 +99,7 @@ uint32_t* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
     int tmp;
     #pragma omp parallel
     {
-        #pragma omp for reduction(+:tmp) //schedule(static, BLOCK_SIZE)
+        #pragma omp for reduction(+:tmp) schedule(static, BLOCK_SIZE)
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
