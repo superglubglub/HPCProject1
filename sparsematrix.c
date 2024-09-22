@@ -61,6 +61,21 @@ uint32_t* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     return result;
 }
 
+int writeSparseMatrixToFile(SparseRow* values, SparseRow* indexes) {
+    FILE *fileb = fopen("../FileB.txt", "w");
+    FILE *filec = fopen("../FileC.txt", "w");
+    for(int i = 0; i < size; i++) {
+        for(int j = 0; j < indexes[i].size; j++) {
+            if(values[i].size == 1) fprintf(fileb, "00");
+            else fprintf(fileb, "%6d ", values[i].col[j]);
+            if(indexes[i].size == 1) fprintf(fileb, "00");
+            else fprintf(filec, "%6d ", indexes[i].col[j]);
+        }
+        fprintf(fileb, "\n"); fprintf(filec, "\n");
+    }
+    return 0;
+}
+
 /*
  *  Since it is sorted I can use binary search to find the element, as much as I don't want to write a novel binary
  *  searching algorithm...
