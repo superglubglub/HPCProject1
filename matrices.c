@@ -27,7 +27,7 @@ uint8_t* createMatrix(float prob)
     #pragma omp parallel
     {
         uint32_t seed = time(NULL) ^ omp_get_thread_num();
-        #pragma omp parallel for schedule(static, BLOCK_SIZE)
+        #pragma omp parallel for collapse(2) schedule(static, BLOCK_SIZE)
         for (int i = 0; i < DEFAULT_SIZE; i++){
             for (int j = 0; j < DEFAULT_SIZE; j++){
                 if(xorshift32(&seed) < threshold) {
@@ -99,7 +99,7 @@ uint32_t* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
     int tmp;
     #pragma omp parallel
     {
-        #pragma omp for reduction(+:tmp) collapse(2) schedule(dynamic, 1)
+        #pragma omp for reduction(+:tmp) collapse(2) schedule(static, BLOCK_SIZE)
         for (int i = 0; i < DEFAULT_SIZE; i++)
         {
             for (int j = 0; j < DEFAULT_SIZE; j++)

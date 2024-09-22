@@ -44,7 +44,7 @@ uint32_t* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     printf("\t\tAllocated %lu bytes for sparse multiplication...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
 
     int tmp;
-    #pragma omp parallel for collapse(2) schedule(dynamic, 1)
+    #pragma omp parallel for collapse(2) schedule(static, BLOCK_SIZE)
     for(int i = 0; i < DEFAULT_SIZE; i++) {
         for(int j = 0; j < DEFAULT_SIZE; j++){
             tmp = 0;

@@ -21,7 +21,7 @@ FILE* initLogFile() {
 
 int writeLogs(FILE *fp, STATS stats) {
     fprintf(fp,
-        "$SIZE:$%d\t$PROB:$%.2f\t$THREADS:$%d\n",
+        "\n$SIZE:$%d\t$PROB:$%.2f\t$THREADS:$%d\n",
         stats.matrix_size, stats.prob, stats.num_threads);
     return 0;
 }
@@ -44,7 +44,7 @@ int closeLogs(FILE *fp, STATS stats) {
 int writeOperation(FILE *fp, char* funcName, STATS* stats) {
     double operationTime = getRuntime(stats->start_time, omp_get_wtime());
     fprintf(fp,
-        "\t%s: %fs\n",
+        "\t%s:%fs\n",
         funcName,getRuntime(stats->runtime, operationTime));
     fflush(fp);
     stats->runtime = operationTime;
