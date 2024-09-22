@@ -4,14 +4,14 @@
 //initialise the crow with calloc'd values
 SparseRow initRow() {
     SparseRow row = {
-        .col = (int*) calloc(DEFAULT_SIZE, sizeof(int)),
+        .col = (uint32_t*) calloc(DEFAULT_SIZE, sizeof(int)),
         .size = 1,
     };
     return row;
 }
 
 void cmpRowMem(SparseRow* row) {
-    int* tmp = realloc(row->col, sizeof(int) * row->size);
+    uint32_t* tmp = realloc(row->col, sizeof(uint32_t) * row->size);
     row->col = tmp;
 }
 
@@ -39,8 +39,8 @@ int findIndex(int index, SparseRow* indexes, SparseRow* values) {
     return 0;
 }
 
-int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
-    int* result = (int*) malloc((long) DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
+uint32_t* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
+    uint32_t* result = (uint32_t*) malloc((long) DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
     printf("\t\tAllocated %lu bytes for sparse multiplication...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
 
     int tmp;

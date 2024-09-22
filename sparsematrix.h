@@ -32,8 +32,8 @@ typedef struct {
 typedef struct {
     MultiMatrix matrix_1;
     MultiMatrix matrix_2;
-    int* multi_large;
-    int* multi_small;
+    uint32_t* multi_large;
+    uint32_t* multi_small;
 } SIM;
 
 //crow shit
@@ -41,7 +41,7 @@ SparseRow initRow();
 void cmpRowMem(SparseRow* row);
 void addSparseValue(SparseRow valueRow, SparseRow indexRow, int nextindex, int value, int index);
 void freeSparseMatrix(SparseRow* sparseMatrix);
-int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B);
+uint32_t* multiplySparseMatrices(MultiMatrix A, MultiMatrix B);
 FILE* initLogFile();
 int writeLogs(FILE *fp, STATS stats);
 int writeOperation(FILE *fp, char* funcName, STATS* stats);
