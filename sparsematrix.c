@@ -10,6 +10,15 @@ SparseRow initRow() {
     return row;
 }
 
+// special initialiser for contiguous memory access
+SparseRow initContigRow() {
+    SparseRow row = {
+        .col = (int*) malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int)),
+        .size = 1,
+    };
+    return row;
+}
+
 void cmpRowMem(SparseRow* row) {
     int* tmp = realloc(row->col, sizeof(int) * row->size);
     row->col = tmp;
@@ -57,12 +66,14 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     int* result = malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
     printf("\t\tAllocated %lu bytes for sparse multiplication...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
 
-    SparseRow transposeValues = initRow();
-    SparseRow transposeIndexes = initRow();
+    SparseRow transposeValues = initContigRow();
+    SparseRow transposeIndexes = initContigRow();
     transposeSparseMatrix(
         B.values, B.indexes,
         transposeValues, transposeIndexes
     );
+    printf("\t\tAllocated %lu bytes for tranposed sparse indexes...\n", transposeIndexes.size * sizeof(int));
+    printf("\t\tAllocated %lu bytes for tranposed sparse values...\n", transposeValues.size * sizeof(int));
 
     int tmp;
     int nextIndex = 0;
