@@ -88,7 +88,7 @@ int* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
         #pragma omp single
         {
             int num_threads = omp_get_num_threads();
-            blksize = DEFAULT_SIZE / num_threads();
+            blksize = DEFAULT_SIZE / num_threads;
         }
         #pragma omp for schedule(static, blksize) reduction(+:tmp) //private(i,j,k)
         for (int i = 0; i < DEFAULT_SIZE; i++)
