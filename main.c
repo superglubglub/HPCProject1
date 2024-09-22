@@ -7,31 +7,32 @@ void compressValues(MultiMatrix *matrix)
 {
     matrix->values = (SparseRow*) malloc(DEFAULT_SIZE * sizeof(SparseRow));
     matrix->indexes = (SparseRow*) malloc( DEFAULT_SIZE * sizeof(SparseRow));
-        for (int i = 0; i < DEFAULT_SIZE; i++) {
-            // create the indexes with all the space
-            matrix->values[i] = initRow();
-            matrix->indexes[i] = initRow();
-            for (int j = 0; j < DEFAULT_SIZE; j++) {
-                if (matrix->matrix[i * DEFAULT_SIZE + j] != 0) {
-                    matrix->indexes[i].col[matrix->indexes[i].size - 1] = j;
-                    matrix->values[i].col[matrix->values[i].size - 1] = matrix->matrix[i * DEFAULT_SIZE + j];
-                    matrix->indexes[i].size++; matrix->values[i].size++;
-                }
+    for (int i = 0; i < DEFAULT_SIZE; i++) {
+        // create the indexes with all the space
+        matrix->values[i] = initRow();
+        matrix->indexes[i] = initRow();
+        #pragma omp parallel for shared(matrix, matrix->values, matrix->indexes)
+        for (int j = 0; j < DEFAULT_SIZE; j++) {
+            if (matrix->matrix[i * DEFAULT_SIZE + j] != 0) {
+                matrix->indexes[i].col[matrix->indexes[i].size - 1] = j;
+                matrix->values[i].col[matrix->values[i].size - 1] = matrix->matrix[i * DEFAULT_SIZE + j];
+                matrix->indexes[i].size++; matrix->values[i].size++;
             }
-            cmpRowMem(&matrix->values[i]);
-            cmpRowMem(&matrix->indexes[i]);
         }
+        cmpRowMem(&matrix->values[i]);
+        cmpRowMem(&matrix->indexes[i]);
+    }
 }
 
 void freeSim(SIM s) {
-    freeMiniMatrix(s.matrix_1.matrix);
-    freeMiniMatrix(s.matrix_2.matrix);
-    freeMatrix(s.multi_large);
+    free(s.matrix_1.matrix);
+    free(s.matrix_2.matrix);
+    free(s.multi_large);
     freeSparseMatrix(s.matrix_1.values);
     freeSparseMatrix(s.matrix_1.indexes);
     freeSparseMatrix(s.matrix_2.values);
     freeSparseMatrix(s.matrix_2.indexes);
-    freeMatrix(s.multi_small);
+    free(s.multi_small);
 }
 
 int simulate(float prob, STATS* stats, FILE *fp) {
@@ -66,10 +67,10 @@ int main(int argc, char **argv)
     int opt;
     while((opt = getopt(argc, argv, "i:t:")) != -1) {
         switch(opt) {
-            case 'i':
+            case 'I':
                 iterations = atoi(optarg);
                 break;
-            case 't':
+            case 'T':
                 threadcount = atoi(optarg);
                 break;
             case '?':
