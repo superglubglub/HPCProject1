@@ -42,6 +42,7 @@ void cmpRowMem(SparseRow* row);
 void addSparseValue(SparseRow valueRow, SparseRow indexRow, int nextindex, int value, int index);
 void freeSparseMatrix(SparseRow* sparseMatrix);
 uint32_t* multiplySparseMatrices(MultiMatrix A, MultiMatrix B);
+int writeSparseMatrixToFile(SparseRow* values, SparseRow* indexes);
 FILE* initLogFile();
 int writeLogs(FILE *fp, STATS stats);
 int writeOperation(FILE *fp, char* funcName, STATS* stats);
