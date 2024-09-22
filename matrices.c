@@ -27,7 +27,7 @@ uint8_t* createMatrix(float prob)
     #pragma omp parallel
     {
         uint32_t seed = time(NULL) ^ omp_get_thread_num();
-        #pragma omp parallel for collapse(2) schedule(static, BLOCK_SIZE)
+        #pragma omp for schedule(static, BLOCK_SIZE)
         for (int i = 0; i < size; i++){
             for (int j = 0; j < size; j++){
                 if(xorshift32(&seed) < threshold) {
