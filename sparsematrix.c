@@ -44,7 +44,7 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     printf("\t\tAllocated %lu bytes for sparse multiplication...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
 
     int tmp;
-    #pragma omp parallel for reduction(+:tmp) shared(result) schedule(dynamic, 1)
+    #pragma omp parallel for reduction(+:tmp) schedule(static, BLOCK_SIZE)
     for(int i = 0; i < DEFAULT_SIZE; i++) {
         for(int j = 0; j < DEFAULT_SIZE; j++){
             tmp = 0;
