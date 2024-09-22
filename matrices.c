@@ -61,6 +61,16 @@ void freeMatrix(int *matrix) {
     free(matrix);
 }
 
+void transposeMatrix(uint8_t* matrix, uint8_t* transpose) {
+    int i, j;
+    for(i = 0; i < DEFAULT_SIZE; i++) {
+        for(j = 0; j < DEFAULT_SIZE; j++) {
+            transpose[j * DEFAULT_SIZE + i] = matrix[i * DEFAULT_SIZE + j];
+        }
+    }
+    return;
+}
+
 int testMatrix(int* matrix_1, int* matrix_2) {
     int failures = 0;
     #pragma omp parallel for
@@ -82,30 +92,29 @@ int* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
     int* result = malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
     printf("\t\tAllocated %lu bytes for matrix...\n", DEFAULT_SIZE * sizeof(int) * DEFAULT_SIZE);
 
-    int i, j, k, blksize, tmp;
-    #pragma omp parallel
-    {
-        #pragma omp single
-        {
-            int num_threads = omp_get_num_threads();
-            blksize = DEFAULT_SIZE / num_threads;
-        }
-        #pragma omp for schedule(static, blksize) reduction(+:result[i * DEFAULT_SIZE + j]) private(i,j,k)
-        for (i = 0; i < DEFAULT_SIZE; i++)
-        {
-            for (k = 0; k < DEFAULT_SIZE; k++)
-            {
-                //tmp = 0;
-                for (j = 0; j < DEFAULT_SIZE; j++)
-                {
-                    result[i * DEFAULT_SIZE + j] += (matrix_1[i * DEFAULT_SIZE + k] * matrix_2[k * DEFAULT_SIZE + j]);
-                    //printf("%2d",omp_get_thread_num());
-                }
+    //get the transpose of matrix_2
+    uint8_t* transpose = malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
+    printf("\t\tAllocated %lu bytes for new tranpose matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
+    transposeMatrix(matrix_2, transpose);
 
-                //printf("[%d][%d]>",i,j);
+    int tmp;
+    #pragma omp parallel for schedule(static, blksize) reduction(+:tmp)
+    for (int i = 0; i < DEFAULT_SIZE; i++)
+    {
+        for (int j = 0; j < DEFAULT_SIZE; j++)
+        {
+            tmp = 0;
+            for (int k = 0; k < DEFAULT_SIZE; k++)
+            {
+                tmp += (matrix_1[i * DEFAULT_SIZE + k] * matrix_2[i * DEFAULT_SIZE + k]);
+                //printf("%2d",omp_get_thread_num());
             }
+            result[i * DEFAULT_SIZE + j] = tmp;
+            //printf("[%d][%d]>",i,j);
         }
     }
+
+    free(transpose);
 
 
     return result;
