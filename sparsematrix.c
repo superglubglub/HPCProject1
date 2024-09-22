@@ -70,7 +70,8 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
             tmp = 0;
             for(int k = 0; k < A.indexes[i].size; k++)
             {
-                tmp += (A.values[i].col[k] * transpose[A.indexes[i].col[k] + (j * DEFAULT_SIZE)]);
+                int kindex = A.indexes[i].col[k];
+                tmp += A.values[i].col[k] * (int) transpose[kindex + j * DEFAULT_SIZE];
             }
             result[i * DEFAULT_SIZE + j] = tmp;
         }

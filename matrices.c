@@ -63,7 +63,7 @@ void freeMatrix(int *matrix) {
 
 int testMatrix(int* matrix_1, int* matrix_2) {
     int failures = 0;
-    #pragma omp parallel for collapse(2) reduction(+:failures)
+    #pragma omp parallel for
     for (int i = 0; i < DEFAULT_SIZE; i++) {
         for (int j = 0; j < DEFAULT_SIZE; j++) {
             if (matrix_1[i * DEFAULT_SIZE + j] != matrix_2[i * DEFAULT_SIZE + j]) {
