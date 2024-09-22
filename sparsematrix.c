@@ -64,14 +64,12 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     #pragma omp parallel for schedule(dynamic, 1) reduction(+:tmp)
     for (int i = 0; i < DEFAULT_SIZE; i++)
     {
-        SparseRow* a_values = &A.values[i];
-        SparseRow* a_indexes = &A.indexes[i];
         for (int j = 0; j < DEFAULT_SIZE; j++)
         {
             tmp = 0;
-            for(int k = 0; k < a_indexes->size; k++)
+            for(int k = 0; k < A.indexes[i].size; k++)
             {
-                tmp += a_values->col[k] * transpose[j * DEFAULT_SIZE + a_indexes->col[k]];
+                tmp += (A.indexes[i].col[k] * transpose[j * DEFAULT_SIZE + A.indexes[i].col[k]]);
             }
             result[i * DEFAULT_SIZE + j] = tmp;
         }
