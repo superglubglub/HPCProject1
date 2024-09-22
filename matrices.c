@@ -30,9 +30,8 @@ uint8_t* createMatrix(float prob)
         #pragma omp parallel for schedule(static, BLOCK_SIZE)
         for (int i = 0; i < DEFAULT_SIZE; i++){
             for (int j = 0; j < DEFAULT_SIZE; j++){
-                uint32_t rand_val = xorshift32(&seed);
-                if(rand_val < threshold) {
-                    matrix[i * DEFAULT_SIZE + j] = (rand_val % 9) + 1;
+                if(xorshift32(&seed) < threshold) {
+                    matrix[i * DEFAULT_SIZE + j] = (xorshift32(&seed) % 9) + 1;
                 } else {
                     matrix[i * DEFAULT_SIZE + j] = 0;
                 }
