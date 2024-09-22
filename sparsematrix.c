@@ -40,18 +40,15 @@ int findIndex(int index, SparseRow* indexes, SparseRow* values) {
 }
 
 //get the transpose of the sparse matrix as a single sparse row
-uint8_t* transposeSparseMatrix(SparseRow* sparseValues, SparseRow* sparseIndexes) {
+uint8_t* transposeSparseMatrix(SparseRow* sparseValues, SparseRow* sparseIndexes, uint8_t* transpose) {
 
     // init all rows in the transpose matrix
-    uint8_t* transpose = calloc(DEFAULT_SIZE * DEFAULT_SIZE, sizeof(uint8_t));
-    for(int i = 0; i < DEFAULT_SIZE; i++) {
-        SparseRow row = sparseIndexes[i];
-        for(int j = 0; j < row.size; j++) {
-            int index = row.col[j];
-            transpose[index * DEFAULT_SIZE + i] = sparseValues[i].col[j];
+    int i, j;
+    for(i = 0; i < DEFAULT_SIZE; i++) {
+        for(j = 0; j < sparseIndexes[i].size; j++) {
+            transpose[sparseIndexes[i].col[j] * DEFAULT_SIZE + i] = sparseValues[i].col[j];
         }
     }
-    printf("\t\tAllocated %lu bytes for tranposed sparse matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
     return transpose;
 }
 
@@ -59,7 +56,9 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     int* result = malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
     printf("\t\tAllocated %lu bytes for sparse multiplication...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int));
 
-    uint8_t* transpose = transposeSparseMatrix(B.values, B.indexes);
+    uint8_t* transpose = calloc(DEFAULT_SIZE * DEFAULT_SIZE, sizeof(uint8_t));
+    printf("\t\tAllocated %lu bytes for tranposed sparse matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
+    transposeSparseMatrix(B.values, B.indexes, transpose);
 
     /* int tmp;
     #pragma omp parallel for shared(result) schedule(dynamic, 1)
