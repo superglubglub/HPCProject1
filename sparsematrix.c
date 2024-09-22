@@ -60,13 +60,12 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     printf("\t\tAllocated %lu bytes for tranposed sparse matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
     transposeSparseMatrix(B.values, B.indexes, transpose);
 
-    /* int tmp;
-    #pragma omp parallel for shared(result) schedule(dynamic, 1)
     for (int i = 0; i < DEFAULT_SIZE; i++)
     {
         for (int j = 0; j < DEFAULT_SIZE; j++)
         {
-            tmp = 0;
+            int tmp = 0;
+            #pragma omp parallel for reduction(+:tmp) schedule(dynamic)
             for(int k = 0; k < A.values[i].size; k++)
             {
                 int a_index = A.indexes[i].col[k]; int a_value = A.values[i].col[k];
@@ -74,9 +73,9 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
             }
             result[i * DEFAULT_SIZE + j] = tmp;
         }
-    }*/
+    }
 
-    int i, j, k;
+    /*int i, j, k;
     #pragma omp parallel for private(i, j, k) schedule(static, BLOCK_SIZE)
     for(i = 0; i < DEFAULT_SIZE; i++) {
         SparseRow* a_values = &A.values[i];
@@ -91,7 +90,7 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
                 result[i * DEFAULT_SIZE + j] += (a_value * b_value);
             }
         }
-    }
+    }*/
 
     free(transpose);
     return result;
