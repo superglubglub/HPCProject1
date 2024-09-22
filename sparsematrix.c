@@ -45,9 +45,10 @@ uint8_t* transposeSparseMatrix(SparseRow* sparseValues, SparseRow* sparseIndexes
     // init all rows in the transpose matrix
     uint8_t* transpose = calloc(DEFAULT_SIZE * DEFAULT_SIZE, sizeof(uint8_t));
     for(int i = 0; i < DEFAULT_SIZE; i++) {
-        for(int j = 0; j < sparseIndexes[i].size; j++) {
-            int row = sparseIndexes[i].col[j];
-            transpose[row * DEFAULT_SIZE + i] = sparseValues[i].col[j];
+        SparseRow row = sparseIndexes[i];
+        for(int j = 0; j < row.size; j++) {
+            int index = row.col[j];
+            transpose[index * DEFAULT_SIZE + i] = sparseValues[i].col[j];
         }
     }
     printf("\t\tAllocated %lu bytes for tranposed sparse matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
@@ -69,7 +70,7 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
             tmp = 0;
             for(int k = 0; k < A.indexes[i].size; k++)
             {
-                tmp += A.values[i].col[k] * transpose[A.indexes[i].col[k] + j * DEFAULT_SIZE];
+                tmp += A.values[i].col[k] * transpose[j * DEFAULT_SIZE + A.indexes[i].col[k]];
             }
             result[i * DEFAULT_SIZE + j] = tmp;
         }
