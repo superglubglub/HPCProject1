@@ -17,7 +17,7 @@ void cmpRowMem(SparseRow* row) {
 
 void freeSparseMatrix(SparseRow* sparseMatrix) {
     for(int i = 0; i < size; i++) {
-        free(&sparseMatrix[i].col);
+        free(sparseMatrix[i].col);
     } free(sparseMatrix);
 }
 
