@@ -48,7 +48,7 @@ uint8_t* transposeSparseMatrix(SparseRow* sparseValues, SparseRow* sparseIndexes
         SparseRow row = sparseIndexes[i];
         for(int j = 0; j < row.size; j++) {
             int index = row.col[j];
-            transpose[index * DEFAULT_SIZE + i] = sparseValues[i].col[j];
+            transpose[index * DEFAULT_SIZE + i] = (uint8_t) sparseValues[i].col[j];
         }
     }
     printf("\t\tAllocated %lu bytes for tranposed sparse matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
@@ -62,7 +62,7 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     uint8_t* transpose = transposeSparseMatrix(B.values, B.indexes);
 
     int tmp;
-    #pragma omp parallel for schedule(static, BLOCK_SIZE) collapse(2) reduction(+:tmp)
+    #pragma omp parallel for schedule(static, BLOCK_SIZE) reduction(+:tmp)
     for (int i = 0; i < DEFAULT_SIZE; i++)
     {
         for (int j = 0; j < DEFAULT_SIZE; j++)
@@ -70,7 +70,7 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
             tmp = 0;
             for(int k = 0; k < A.indexes[i].size; k++)
             {
-                tmp += A.values[i].col[k] * transpose[j * DEFAULT_SIZE + A.indexes[i].col[k]];
+                tmp += (A.values[i].col[k] * transpose[A.indexes[i].col[k] + (j * DEFAULT_SIZE)]);
             }
             result[i * DEFAULT_SIZE + j] = tmp;
         }
