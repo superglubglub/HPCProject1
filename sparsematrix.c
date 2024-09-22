@@ -45,10 +45,10 @@ uint8_t* transposeSparseMatrix(SparseRow* sparseValues, SparseRow* sparseIndexes
     // init all rows in the transpose matrix
     uint8_t* transpose = calloc(DEFAULT_SIZE * DEFAULT_SIZE, sizeof(uint8_t));
     for(int i = 0; i < DEFAULT_SIZE; i++) {
-        SparseRow row = sparseIndexes[i];
-        for(int j = 0; j < row.size; j++) {
-            int index = row.col[j];
-            transpose[index * DEFAULT_SIZE + i] = (uint8_t) sparseValues[i].col[j];
+        SparseRow* row = &sparseIndexes[i];
+        for(int j = 0; j < row->size; j++) {
+            int index = row->col[j];
+            transpose[index * DEFAULT_SIZE + i] = sparseValues[i].col[j];
         }
     }
     printf("\t\tAllocated %lu bytes for tranposed sparse matrix...\n", DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t));
