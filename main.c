@@ -6,7 +6,7 @@
 void compressValues(MultiMatrix *matrix)
 {
     matrix->values = (SparseRow*) malloc(DEFAULT_SIZE * sizeof(SparseRow));
-    matrix->indexes = (SparseRow*) malloc(DEFAULT_SIZE * sizeof(SparseRow));
+    matrix->indexes = (SparseRow*) malloc( DEFAULT_SIZE * sizeof(SparseRow));
         for (int i = 0; i < DEFAULT_SIZE; i++) {
             // create the indexes with all the space
             matrix->values[i] = initRow();
