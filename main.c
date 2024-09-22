@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <omp.h>
 
-int size;
+long size;
 char* logfile;
 
 void compressValues(MultiMatrix *matrix)

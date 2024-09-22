@@ -51,7 +51,7 @@ int closeLogs(FILE *fp, STATS stats);
 double getRuntime(double start, double end);
 
 //externs
-extern int size;
+extern long size;
 extern char* logfile;
 
 #endif //CMATRIX_H
