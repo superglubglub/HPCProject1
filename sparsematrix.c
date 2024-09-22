@@ -45,9 +45,9 @@ uint8_t* transposeSparseMatrix(SparseRow* sparseValues, SparseRow* sparseIndexes
     // init all rows in the transpose matrix
     uint8_t* transpose = calloc(DEFAULT_SIZE * DEFAULT_SIZE, sizeof(uint8_t));
     for(int i = 0; i < DEFAULT_SIZE; i++) {
-        SparseRow* row = &sparseIndexes[i];
-        for(int j = 0; j < row->size; j++) {
-            int index = row->col[j];
+        SparseRow row = sparseIndexes[i];
+        for(int j = 0; j < row.size; j++) {
+            int index = row.col[j];
             transpose[index * DEFAULT_SIZE + i] = sparseValues[i].col[j];
         }
     }
@@ -62,7 +62,7 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     uint8_t* transpose = transposeSparseMatrix(B.values, B.indexes);
 
     int tmp;
-    #pragma omp parallel for reduction(+:tmp)
+    #pragma omp parallel //for reduction(+:tmp)
     for (int i = 0; i < DEFAULT_SIZE; i++)
     {
         for (int j = 0; j < DEFAULT_SIZE; j++)
