@@ -13,15 +13,15 @@ struct tm* get_time(){
 }
 
 FILE* initLogFile() {
-    FILE *fp = fopen("../log.txt", "at+");
+    FILE *fp = fopen("../logging.txt", "at+");
     if(!fp) fp = fopen("../log.txt", "wt");
-    fprintf(fp, "\n\t// NEW TEST //\t - %s\t\n",asctime(get_time()));
+    fprintf(fp, "\n\t$$NEWTEST$$\t - %s\t\n",asctime(get_time()));
     return fp;
 }
 
 int writeLogs(FILE *fp, STATS stats) {
     fprintf(fp,
-        "-----\nMatrix Size: %d\nMatrix Prob: %.6f\nNumber of Threads: %d\n",
+        "\n$SIZE:$%d\t$PROB:$%.2f\t$THREADS:$%d\n",
         stats.matrix_size, stats.prob, stats.num_threads);
     return 0;
 }
@@ -44,7 +44,7 @@ int closeLogs(FILE *fp, STATS stats) {
 int writeOperation(FILE *fp, char* funcName, STATS* stats) {
     double operationTime = getRuntime(stats->start_time, omp_get_wtime());
     fprintf(fp,
-        "\tPerformed %s in %fs\n",
+        "\t%s: %fs\n",
         funcName,getRuntime(stats->runtime, operationTime));
     fflush(fp);
     stats->runtime = operationTime;

@@ -39,21 +39,21 @@ int simulate(float prob, STATS* stats, FILE *fp) {
         .matrix_1 = {.matrix = createMatrix(prob)},
         .matrix_2 = {.matrix = createMatrix(prob)},
     }; printf("\tMade matrices...\n");
-    writeOperation(fp, "Matrix Creation", stats);
+    writeOperation(fp, "M_CREAT:", stats);
     simulation.multi_large = multiplyMatrix(simulation.matrix_1.matrix, simulation.matrix_2.matrix);
     printf("\tMultiplied matrices...\n");
-    writeOperation(fp, "Matrix Multiplication", stats);
+    writeOperation(fp, "M_MULTI:", stats);
 
     compressValues(&simulation.matrix_1);
     compressValues(&simulation.matrix_2);
     printf("\tCompressed matrices...\n");
-    writeOperation(fp, "Matrix Compression", stats);
+    writeOperation(fp, "M_COMPR:", stats);
     simulation.multi_small = multiplySparseMatrices(simulation.matrix_1, simulation.matrix_2);
     printf("\tMultiplied compression matrices...\n");
-    writeOperation(fp, "Compressed Matrix Multiplication", stats);
+    writeOperation(fp, "C_MULTI:", stats);
     int test = testMatrix(simulation.multi_small, simulation.multi_large);
     printf("Tested compressed matrix multiplication result...\n");
-    writeOperation(fp, "Matrix Verification", stats);
+    writeOperation(fp, "VERIFIC:", stats);
 
     freeSim(simulation);
     return test;
