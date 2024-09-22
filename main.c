@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <omp.h>
 
+/*
 void compressValues(MultiMatrix *matrix)
 {
     matrix->values = (SparseRow*) malloc(DEFAULT_SIZE * sizeof(SparseRow));
@@ -21,16 +22,41 @@ void compressValues(MultiMatrix *matrix)
             cmpRowMem(&matrix->values[i]);
             cmpRowMem(&matrix->indexes[i]);
         }
+}*/
+
+void compressValues(MultiMatrix *matrix)
+{
+    SparseMatrix sparse = {
+        .val = (uint8_t*) malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(uint8_t)),
+        .idx = (int*) malloc(DEFAULT_SIZE * DEFAULT_SIZE * sizeof(int)),
+        .offset = (int*) malloc(DEFAULT_SIZE * sizeof(int)),
+    };
+    matrix->sparse = sparse;
+    matrix->sparse.offset[0] = 0;
+
+    for (int i = 0; i < DEFAULT_SIZE; i++) {
+        if(i != 0) {
+            matrix->sparse.offset[i] = matrix->sparse.offset[i-1];
+        }
+        for (int j = 0; j < DEFAULT_SIZE; j++) {
+            if (matrix->matrix[i * DEFAULT_SIZE + j] != 0) {
+                matrix->sparse.idx[matrix->sparse.offset[i]] = j;
+                matrix->sparse.val[matrix->sparse.offset[i]] = matrix->matrix[i * DEFAULT_SIZE + j];
+                matrix->sparse.offset[i]++;
+            }
+        }
+        cmpContigSparse(&matrix->sparse);
+    }
 }
 
 void freeSim(SIM s) {
     freeMiniMatrix(s.matrix_1.matrix);
     freeMiniMatrix(s.matrix_2.matrix);
     freeMatrix(s.multi_large);
-    freeSparseMatrix(s.matrix_1.values);
-    freeSparseMatrix(s.matrix_1.indexes);
-    freeSparseMatrix(s.matrix_2.values);
-    freeSparseMatrix(s.matrix_2.indexes);
+    freeSparseMatrix(&s.matrix_1.sparse);
+    //freeSparseMatrix(s.matrix_1.indexes);
+    freeSparseMatrix(&s.matrix_2.sparse);
+    //freeSparseMatrix(s.matrix_2.indexes);
     freeMatrix(s.multi_small);
 }
 

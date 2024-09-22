@@ -14,9 +14,15 @@ typedef struct {
 } SparseRow;
 
 typedef struct {
+    uint8_t* val;
+    int* idx;
+    int* offset;
+} SparseMatrix;
+
+typedef struct {
     uint8_t* matrix;
-    SparseRow* values;
-    SparseRow* indexes;
+    SparseMatrix sparse;
+    //SparseMatrix* indexes;
 } MultiMatrix;
 
 typedef struct {
@@ -39,8 +45,10 @@ typedef struct {
 //crow shit
 SparseRow initRow();
 void cmpRowMem(SparseRow* row);
+void cmpContigSparse(SparseMatrix* matrix);
 void addSparseValue(SparseRow valueRow, SparseRow indexRow, int nextindex, int value, int index);
-void freeSparseMatrix(SparseRow* sparseMatrix);
+//void freeSparseMatrix(SparseRow* sparseMatrix);
+void freeSparseMatrix(SparseMatrix* sparseMatrix);
 int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B);
 FILE* initLogFile();
 int writeLogs(FILE *fp, STATS stats);
