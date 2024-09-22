@@ -1,5 +1,6 @@
 #include "sparsematrix.h"
 #include "matrices.h"
+#include "vars.h"
 #include <unistd.h>
 #include <omp.h>
 
