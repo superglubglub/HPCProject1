@@ -15,7 +15,6 @@ void compressValues(MultiMatrix *matrix)
         // create the indexes with all the space
         matrix->values[i] = initRow();
         matrix->indexes[i] = initRow();
-        #pragma omp parallel for
         for (int j = 0; j < size; j++) {
             if (matrix->matrix[i * size + j] != 0) {
                 matrix->indexes[i].col[matrix->indexes[i].size - 1] = j;
