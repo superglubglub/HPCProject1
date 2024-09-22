@@ -71,7 +71,7 @@ int* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
             tmp = 0;
             for(int k = 0; k < a_indexes->size; k++)
             {
-                tmp += a_values->col[k] * transpose[i * DEFAULT_SIZE + a_indexes->col[k]];
+                tmp += a_values->col[k] * transpose[a_indexes->col[k] + j * DEFAULT_SIZE];
             }
             result[i * DEFAULT_SIZE + j] = tmp;
         }
