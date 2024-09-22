@@ -106,7 +106,7 @@ int* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
             tmp = 0;
             for (int k = 0; k < DEFAULT_SIZE; k++)
             {
-                tmp += (matrix_1[i * DEFAULT_SIZE + k] * transpose[k + i * DEFAULT_SIZE]);
+                tmp += (matrix_1[i * DEFAULT_SIZE + k] * transpose[k + j * DEFAULT_SIZE]);
                 //printf("%2d",omp_get_thread_num());
             }
             result[i * DEFAULT_SIZE + j] = tmp;
