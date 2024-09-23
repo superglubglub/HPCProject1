@@ -11,7 +11,7 @@ SparseRow initRow() {
 }
 
 void cmpRowMem(SparseRow* row) {
-    uint32_t* tmp = realloc(row->col, sizeof(uint32_t) * row->size);
+    uint32_t* tmp = realloc(&row->col, sizeof(uint32_t) * row->size);
     row->col = tmp;
 }
 
