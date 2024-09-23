@@ -44,7 +44,7 @@ uint32_t* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     printf("\t\tAllocated %lu bytes for sparse multiplication...\n", size * size * sizeof(int));
 
     int tmp;
-    #pragma omp parallel for reduction(+:tmp) schedule(static, BLOCK_SIZE)
+    #pragma omp parallel for reduction(+:tmp) schedule(static)
     for(int i = 0; i < size; i++) {
         for(int j = 0; j < size; j++){
             tmp = 0;
@@ -60,6 +60,71 @@ uint32_t* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
 
     return result;
 }
+
+uint32_t* multiplySparseMatricesDYNAMIC(MultiMatrix A, MultiMatrix B) {
+    uint32_t* result = calloc(size * size, sizeof(uint32_t));
+    printf("\t\tAllocated %lu bytes for sparse multiplication...\n", size * size * sizeof(int));
+
+    int tmp;
+    #pragma omp parallel for reduction(+:tmp) schedule(dynamic)
+    for(int i = 0; i < size; i++) {
+        for(int j = 0; j < size; j++){
+            tmp = 0;
+            for(int k = 0; k < A.values[i].size; k++) {
+                int a_index = A.indexes[i].col[k]; int a_value = A.values[i].col[k];
+                SparseRow* b_values = &B.values[a_index]; SparseRow* b_indexes = &B.indexes[a_index];
+                int b_value = findIndex(j, b_indexes, b_values);
+                tmp += a_value * b_value;
+            }
+            result[i * size + j] = tmp;
+        }
+    }
+
+    return result;
+}
+
+uint32_t* multiplySparseMatricesAUTO(MultiMatrix A, MultiMatrix B) {
+    uint32_t* result = calloc(size * size, sizeof(uint32_t));
+    printf("\t\tAllocated %lu bytes for sparse multiplication...\n", size * size * sizeof(int));
+
+    int tmp;
+    #pragma omp parallel for reduction(+:tmp) schedule(auto)
+    for(int i = 0; i < size; i++) {
+        for(int j = 0; j < size; j++){
+            tmp = 0;
+            for(int k = 0; k < A.values[i].size; k++) {
+                int a_index = A.indexes[i].col[k]; int a_value = A.values[i].col[k];
+                SparseRow* b_values = &B.values[a_index]; SparseRow* b_indexes = &B.indexes[a_index];
+                int b_value = findIndex(j, b_indexes, b_values);
+                tmp += a_value * b_value;
+            }
+            result[i * size + j] = tmp;
+        }
+    }
+    return result;
+}
+
+uint32_t* multiplySparseMatricesGUIDED(MultiMatrix A, MultiMatrix B) {
+    uint32_t* result = calloc(size * size, sizeof(uint32_t));
+    printf("\t\tAllocated %lu bytes for sparse multiplication...\n", size * size * sizeof(int));
+
+    int tmp;
+#pragma omp parallel for reduction(+:tmp) schedule(guided)
+    for(int i = 0; i < size; i++) {
+        for(int j = 0; j < size; j++){
+            tmp = 0;
+            for(int k = 0; k < A.values[i].size; k++) {
+                int a_index = A.indexes[i].col[k]; int a_value = A.values[i].col[k];
+                SparseRow* b_values = &B.values[a_index]; SparseRow* b_indexes = &B.indexes[a_index];
+                int b_value = findIndex(j, b_indexes, b_values);
+                tmp += a_value * b_value;
+            }
+            result[i * size + j] = tmp;
+        }
+    }
+    return result;
+}
+
 
 int writeSparseMatrixToFile(SparseRow* values, SparseRow* indexes) {
     FILE *fileb = fopen("../FileB.txt", "w");

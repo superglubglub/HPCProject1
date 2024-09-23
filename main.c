@@ -6,6 +6,7 @@
 
 long size;
 char* logfile;
+int method;
 
 void compressValues(MultiMatrix *matrix)
 {
@@ -60,6 +61,24 @@ int simulate(float prob, STATS* stats, FILE *fp) {
     writeSparseMatrixToFile(simulation.matrix_1.values, simulation.matrix_1.indexes);
 
     //compressed multiplication
+    switch(method) {
+        case 1:
+            simulation.multi_small = multiplySparseMatricesDYNAMIC(simulation.matrix_1, simulation.matrix_2);
+            writeOperation(fp, "C_MULTI_DYNA:", stats);
+        case 2:
+            simulation.multi_small = multiplySparseMatricesAUTO(simulation.matrix_1, simulation.matrix_2);
+            writeOperation(fp, "C_MULTI_AUTO:", stats);
+            break;
+        case 3:
+            simulation.multi_small = multiplySparseMatricesGUIDED(simulation.matrix_1, simulation.matrix_2);
+            writeOperation(fp, "C_MULTI_GUID:", stats);
+            break;
+        case 0:
+        default:
+            simulation.multi_small = multiplySparseMatrices(simulation.matrix_1, simulation.matrix_2);
+            writeOperation(fp, "C_MULTI_STAT:", stats);
+            break;
+    }
     simulation.multi_small = multiplySparseMatrices(simulation.matrix_1, simulation.matrix_2);
     printf("\tMultiplied compression matrices...\n");
     writeOperation(fp, "C_MULTI:", stats);
@@ -78,9 +97,10 @@ int main(int argc, char **argv)
 {
     size = DEFAULT_SIZE;
     logfile = "logging.txt";
+    method = 0;
     int threadcount = NUM_THREADS;
     int opt;
-    while((opt = getopt(argc, argv, "s:t:")) != -1) {
+    while((opt = getopt(argc, argv, "s:t:l:b:")) != -1) {
         switch(opt) {
             case 's':
                 size = atoi(optarg);
@@ -90,6 +110,9 @@ int main(int argc, char **argv)
                 break;
             case 'l':
                 logfile = optarg;
+                break;
+            case 'b':
+                method = atoi(optarg);
                 break;
             case '?':
             default: /* '?' */
