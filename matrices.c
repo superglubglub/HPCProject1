@@ -95,22 +95,19 @@ uint32_t* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
     transposeMatrix(matrix_2, transpose);
 
     int tmp;
-    #pragma omp parallel
+    #pragma omp parallel for reduction(+:tmp) schedule(static, BLOCK_SIZE)
+    for (int i = 0; i < size; i++)
     {
-        #pragma omp for reduction(+:tmp) schedule(static)
-        for (int i = 0; i < size; i++)
+        for (int j = 0; j < size; j++)
         {
-            for (int j = 0; j < size; j++)
+            tmp = 0;
+            for (int k = 0; k < size; k++)
             {
-                tmp = 0;
-                for (int k = 0; k < size; k++)
-                {
-                    tmp += matrix_1[i * size + k] * transpose[k + j * size];
-                    //printf("%2d",omp_get_thread_num());
-                }
-                result[i * size + j] = tmp;
-                //printf("[%d][%d]>",i,j);
+                tmp += matrix_1[i * size + k] * transpose[k + j * size];
+                //printf("%2d",omp_get_thread_num());
             }
+            result[i * size + j] = tmp;
+            //printf("[%d][%d]>",i,j);
         }
     }
 
