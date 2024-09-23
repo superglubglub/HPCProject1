@@ -10,7 +10,7 @@ char* logfile;
 void compressValues(MultiMatrix *matrix)
 {
     matrix->values = (SparseRow*) malloc(size * sizeof(SparseRow));
-    matrix->indexes = (SparseRow*) malloc( size * sizeof(SparseRow));
+    matrix->indexes = (SparseRow*) malloc(size * sizeof(SparseRow));
     for (int i = 0; i < size; i++) {
         // create the indexes with all the space
         matrix->values[i] = initRow();
@@ -56,8 +56,8 @@ int simulate(float prob, STATS* stats, FILE *fp) {
     compressValues(&simulation.matrix_1);
     compressValues(&simulation.matrix_2);
     printf("\tCompressed matrices...\n");
-    writeSparseMatrixToFile(simulation.matrix_1.values, simulation.matrix_1.indexes);
     writeOperation(fp, "M_COMPR:", stats);
+    writeSparseMatrixToFile(simulation.matrix_1.values, simulation.matrix_1.indexes);
 
     //compressed multiplication
     simulation.multi_small = multiplySparseMatrices(simulation.matrix_1, simulation.matrix_2);
