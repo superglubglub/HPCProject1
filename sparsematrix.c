@@ -11,7 +11,7 @@ SparseRow initRow() {
 }
 
 void cmpRowMem(SparseRow* row) {
-    uint32_t* tmp = realloc(&row->col, sizeof(uint32_t) * row->size);
+    uint32_t* tmp = (uint32_t*) realloc(row->col, sizeof(uint32_t) * row->size);
     row->col = tmp;
 }
 
@@ -40,7 +40,7 @@ int findIndex(int index, SparseRow* indexes, SparseRow* values) {
 }
 
 uint32_t* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
-    uint32_t* result = malloc(size * size * sizeof(uint32_t));
+    uint32_t* result = calloc(size * size, sizeof(uint32_t));
     printf("\t\tAllocated %lu bytes for sparse multiplication...\n", size * size * sizeof(int));
 
     int tmp;
