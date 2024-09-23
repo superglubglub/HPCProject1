@@ -43,16 +43,18 @@ uint32_t* multiplySparseMatrices(MultiMatrix A, MultiMatrix B) {
     uint32_t* result = (uint32_t*) malloc((long) size * size * sizeof(uint32_t));
     printf("\t\tAllocated %lu bytes for sparse multiplication...\n", size * size * sizeof(int));
 
-    #pragma omp parallel for schedule(dynamic, 1) //reduction(+:tmp) //shared(result) private(k)
+    int tmp;
+    #pragma omp parallel for schedule(static) reduction(+:tmp)
     for(int i = 0; i < size; i++) {
         for(int j = 0; j < size; j++){
+            tmp = 0;
             for(int k = 0; k < A.values[i].size; k++) {
                 int a_index = A.indexes[i].col[k]; int a_value = A.values[i].col[k];
                 SparseRow* b_values = &B.values[a_index]; SparseRow* b_indexes = &B.indexes[a_index];
                 int b_value = findIndex(j, b_indexes, b_values);
-                #pragma omp atomic
-                result[i * size + j] += a_value * b_value;
+                tmp += a_value * b_value;
             }
+            result[i * size + j] = tmp;
         }
     }
 
