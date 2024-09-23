@@ -95,7 +95,7 @@ uint32_t* multiplyMatrix(uint8_t* matrix_1, uint8_t* matrix_2) {
     transposeMatrix(matrix_2, transpose);
 
     int tmp;
-    #pragma omp parallel for reduction(+:tmp) schedule(static, BLOCK_SIZE)
+    #pragma omp parallel for reduction(+:tmp) schedule(auto)
     for (int i = 0; i < size; i++)
     {
         for (int j = 0; j < size; j++)
